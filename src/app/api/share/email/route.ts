@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { analyzeCarRequest, analyzeHouseRequest, analyzeSeoRequest } from "@/lib/analyses";
 import { luukError, OOPS, readJson } from "@/lib/api";
 import type { EmailShareResponse } from "@/lib/types";
+import { track } from "@/lib/analytics/track";
 import { renderReportEmail } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { carReport, houseReport, seoReport, shareUrl, type ReportKind, type ShareReport } from "@/lib/report";
@@ -41,6 +42,9 @@ export async function POST(request: Request) {
 
     const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
     const { subject, html, text } = renderReportEmail(report, shareUrl(origin, report), message || undefined);
+
+    // Het e-mailadres van de ontvanger wordt bewust NIET opgeslagen.
+    track(request, { module: "share", action: "email", subject: report.subject, meta: { kind, withMessage: !!message } });
 
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {

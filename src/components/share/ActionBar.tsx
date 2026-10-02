@@ -26,6 +26,15 @@ export function ActionBar({ report }: { report: ShareReport }) {
     timers.current.push(setTimeout(() => set(id, "idle"), 2200));
   };
   const url = () => shareUrl(window.location.origin, report);
+  const beacon = (action: "pdf" | "whatsapp") => {
+    try {
+      const payload = JSON.stringify({ action, kind: report.kind, subject: report.subject });
+      if (!navigator.sendBeacon?.("/api/track", new Blob([payload], { type: "application/json" })))
+        fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }).catch(() => {});
+    } catch {
+      /* analytics mag nooit iets breken */
+    }
+  };
 
   const downloadPdf = async () => {
     set("pdf", "busy");
@@ -40,6 +49,7 @@ export function ActionBar({ report }: { report: ShareReport }) {
       a.click();
       setTimeout(() => URL.revokeObjectURL(href), 10_000);
       flash("pdf");
+      beacon("pdf");
       toast("Rapport gedownload. De waarheid op papier. Sí.");
     } catch (err) {
       console.error(err);
@@ -51,6 +61,7 @@ export function ActionBar({ report }: { report: ShareReport }) {
   const shareWhatsapp = () => {
     window.open(whatsappUrl(whatsappText(report, url())), "_blank", "noopener,noreferrer");
     flash("whatsapp");
+    beacon("whatsapp");
     toast("Doorgestuurd naar WhatsApp. Luuk out.");
   };
 

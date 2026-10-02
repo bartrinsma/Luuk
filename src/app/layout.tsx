@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Background } from "@/components/Background";
-import { Header } from "@/components/Header";
-import { ToastProvider } from "@/components/share/Toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,15 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="nl" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="relative min-h-full overflow-x-hidden">
         <Background />
-        <div className="relative z-10 flex min-h-screen flex-col">
-          <Header />
-          <ToastProvider>
-            <main className="flex flex-1 flex-col">{children}</main>
-          </ToastProvider>
-          <footer className="px-6 pb-8 pt-16 text-center text-xs text-ink/30">
-            Luuk.si — indicaties, geen financieel advies. Al heeft Luuk meestal gelijk. Sí.
-          </footer>
-        </div>
+        <div className="relative z-10 flex min-h-screen flex-col">{children}</div>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import { assessHousePhotos, type PhotoImage } from "@/lib/ai/photoAssessment";
+import { track } from "@/lib/analytics/track";
 import { buildHouseData } from "@/lib/analyses";
 import { luukError, OOPS, readJson } from "@/lib/api";
 import { parseHouseInput } from "@/lib/houseInput";
@@ -38,7 +39,18 @@ export async function POST(request: Request) {
 
   try {
     const { property, analysis } = await buildHouseData(parsed.value);
-    return Response.json(await assessHousePhotos(images, property, analysis));
+    const assessment = await assessHousePhotos(images, property, analysis);
+    track(request, {
+      module: "fotos",
+      action: "photos",
+      input: query,
+      subject: property.adres,
+      province: property.provincie,
+      city: property.woonplaats,
+      value: assessment.aangepastePrijs,
+      meta: { fotoCount: images.length, conditieScore: assessment.conditieScore, correctie: assessment.correctiePercentage, source: assessment.source },
+    });
+    return Response.json(assessment);
   } catch (err) {
     console.error("[api/huizen/fotos]", err);
     return luukError(OOPS, 500);

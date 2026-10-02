@@ -35,6 +35,19 @@ Onder elke analyse (huis, auto, website) staat een actiebalk:
 
 Eén isomorf rapportmodel (`src/lib/report.ts`) voedt alle drie de kanalen.
 
+## Admin & analytics (`/admin`)
+
+Achter `ADMIN_PASSWORD` (HttpOnly-sessiecookie, 7 dagen; zonder variabele staat `/admin` dicht).
+
+- **Dashboard** — aanvragen per onderdeel en per dag, unieke bezoekers, deel-acties, ongeldige invoer, koopje/miskoop-verdeling, piekuren, top woonplaatsen/automerken/websites. Periode: 7/30/90/365 dagen of alles.
+- **Provincies** — ranglijst op *nieuwsgierigheid* (aanvragen per 100.000 inwoners, CBS 2024), absolute aanvragen en gezochte huizen per provincie, met gemiddelde WOZ en miskoop-aandeel.
+- **Aanvragen** — elke ingevoerde postcode/Funda-link, elk kenteken en elke URL, met resultaat en status. Filters op onderdeel, status, provincie, periode en zoekterm; CSV-export (Excel-klaar).
+- **Blog-inzichten** — automatisch geschreven feitjes in Luuk's toon ("De Utrechters zijn het nieuwsgierigst…") met onderbouwing en een *te weinig data*-label, klaar om te kopiëren.
+
+**Hoe er gemeten wordt.** Elke API-route logt na het antwoord (`next/server` `after`) één event in `luuk_events`. Er wordt geen IP-adres en geen e-mailadres opgeslagen; bezoekers worden geteld met een dagelijks wisselende hash (zoals Plausible). De *bezoekersprovincie* komt uit de geo-header van Netlify (`x-nf-geo`) en werkt dus alleen live; de *woningprovincie* uit PDOK of de postcode. Let op: kentekens en adressen die bezoekers invoeren worden wél bewaard — vermeld dat in je privacyverklaring.
+
+**Opslag.** Zet `DATABASE_URL` (of gebruik Netlify DB, dat `NETLIFY_DATABASE_URL` zet). Zonder database gebruikt Luuk PGlite: lokaal in `.data/pglite`, op serverless in `/tmp` — dat laatste is **niet blijvend**, het dashboard waarschuwt daarvoor.
+
 ## Architectuur
 
 ```
