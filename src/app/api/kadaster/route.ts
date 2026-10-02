@@ -6,6 +6,6 @@ import { parseAddressBody } from "@/app/api/huizen/parse";
 export async function POST(request: Request) {
   const parsed = parseAddressBody(await readJson(request));
   if (!parsed.ok) return luukError(parsed.error);
-  const result = await fetchProperty(parsed.value);
+  const result = await fetchProperty(parsed.value.kind === "funda" ? parsed.value.funda.address : parsed.value.query);
   return Response.json(result);
 }

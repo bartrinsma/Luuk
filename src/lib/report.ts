@@ -46,7 +46,7 @@ export function shareUrl(origin: string, report: Pick<ShareReport, "kind" | "que
 
 export function houseReport(d: HouseResponse): ShareReport {
   const p = d.property;
-  const query = p.postcode ? `${formatPostcode(p.postcode)} ${p.huisnummer}` : `${p.straat} ${p.huisnummer}, ${p.woonplaats}`;
+  const query = d.funda?.url ?? (p.postcode ? `${formatPostcode(p.postcode)} ${p.huisnummer}` : `${p.straat} ${p.huisnummer}, ${p.woonplaats}`);
   const stamp = { koopje: "Koopje", eerlijk: "Marktconform", miskoop: "Miskoop" }[d.analysis.verdict];
 
   return {
@@ -64,6 +64,7 @@ export function houseReport(d: HouseResponse): ShareReport {
       { label: "Prijs per m²", value: formatEuro(p.prijsPerM2) },
       { label: `Gemiddeld ${p.woonplaats}`, value: `${formatEuro(p.regioPrijsPerM2)} / m²` },
       { label: "Totale rente (30 jaar)", value: formatEuro(d.mortgage.totalInterest) },
+      ...(d.funda?.vraagprijs ? [{ label: "Vraagprijs (Funda)", value: formatEuro(d.funda.vraagprijs) }] : []),
       { label: "Luuk's eerlijke prijs", value: formatEuro(d.analysis.fairPrice) },
       ...p.historischeVraagprijzen.map((h) => ({ label: `Vraagprijs ${h.jaar}`, value: formatEuro(h.vraagprijs) })),
     ],

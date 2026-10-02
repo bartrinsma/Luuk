@@ -1,5 +1,7 @@
 import type { HouseAnalysis } from "@/lib/analysis";
 import type { LuukSource } from "@/lib/ai/llm";
+import type { FundaListing } from "@/lib/services/funda";
+import type { HousePhoto } from "@/lib/services/housePhotos";
 import type { Property, PropertyResult } from "@/lib/services/kadaster";
 import type { SeoReport, SeoResult } from "@/lib/services/seo";
 import type { Vehicle } from "@/lib/services/rdw";
@@ -22,6 +24,8 @@ export interface HouseResponse {
   dataSource: PropertyResult["source"];
   mortgage: MortgageResult;
   analysis: HouseAnalysis;
+  funda: FundaListing | null;
+  photos: HousePhoto[];
   verdict: string;
   verdictSource: LuukSource;
 }

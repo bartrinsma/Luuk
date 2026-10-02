@@ -23,7 +23,8 @@ export function houseVerdictPrompt(data: unknown): string {
 
 Taak: schrijf "Luuk's Verdict — Koopje of Miskoop?" over deze woning.
 - 2 tot 4 zinnen, scherp en opiniërend.
-- Noem de WOZ-waarde, de maandlast en jouw "eerlijke prijs" (fairPrice) letterlijk.
+- Noem de WOZ-waarde, de maandlast en jouw "eerlijke prijs" (analysis.fairPrice) letterlijk.
+- Staat er een Funda-vraagprijs in de data (funda.vraagprijs), vergelijk die dan expliciet met je eerlijke prijs: dat is de kern van "koopje of miskoop".
 - Benoem één concreet risico of pluspunt op basis van bouwjaar, energielabel of m²-prijs t.o.v. de regio.
 - Eindig met "Sí."
 - Gebruik alleen de getallen uit de data; verzin geen nieuwe bedragen.

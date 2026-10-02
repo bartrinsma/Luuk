@@ -3,8 +3,10 @@ import { analyzeCarRequest, analyzeHouseRequest, analyzeSeoRequest } from "@/lib
 import { luukError, OOPS, readJson } from "@/lib/api";
 import type { EmailShareResponse } from "@/lib/types";
 import { renderReportEmail } from "@/lib/email";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { carReport, houseReport, seoReport, shareUrl, type ReportKind, type ShareReport } from "@/lib/report";
-import { isValidKenteken, kentekenError, normalizeUrl, parseAddressQuery } from "@/lib/validation";
+import { parseHouseInput } from "@/lib/houseInput";
+import { isValidKenteken, kentekenError, normalizeUrl } from "@/lib/validation";
 
 /**
  * POST /api/share/email { kind, query, to, message? }
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
   if (!EMAIL_RE.test(to) || to.length > 254)
     return luukError("Dat e-mailadres klopt niet. Zelfs een postduif heeft een adres nodig. Probeer het opnieuw. Sí.");
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const ip = clientIp(request);
   if (!rateLimit(`ip:${ip}`, 5) || !rateLimit(`to:${to.toLowerCase()}`, 3))
     return luukError("Rustig aan. Je hebt net al een paar mails verstuurd. Over tien minuten mag het weer. Sí.", 429);
 
@@ -72,27 +74,9 @@ async function rebuildReport(kind: ReportKind, query: string): Promise<ShareRepo
     return car ? carReport(car) : "Dit kenteken bestaat niet in het RDW-register. Niks te versturen. Sí.";
   }
   if (kind === "huis") {
-    const parsed = parseAddressQuery(query);
+    const parsed = parseHouseInput(query);
     return parsed.ok ? houseReport(await analyzeHouseRequest(parsed.value)) : parsed.error;
   }
   const url = normalizeUrl(query);
   return url.ok ? seoReport(await analyzeSeoRequest(url.value)) : url.error;
-}
-
-// ---------- Simpele in-memory rate limit (per serverinstantie) ----------
-
-const WINDOW_MS = 10 * 60 * 1000;
-const hits = new Map<string, number[]>();
-
-function rateLimit(key: string, max: number): boolean {
-  const now = Date.now();
-  const recent = (hits.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
-  if (recent.length >= max) {
-    hits.set(key, recent);
-    return false;
-  }
-  recent.push(now);
-  hits.set(key, recent);
-  if (hits.size > 5000) for (const [k, v] of hits) if (v.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
-  return true;
 }

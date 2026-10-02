@@ -107,7 +107,16 @@ export function mockHouseVerdict(p: Property, mortgage: MortgageResult, a: House
   const rente = formatPercent(mortgage.annualRate * 100);
   const labelSlecht = ["E", "F", "G"].includes(p.energielabel);
 
-  const opener =
+  const vraag = a.comparedTo === "vraagprijs" ? formatEuro(a.comparedPrice) : null;
+  const vraagOpener = vraag
+    ? a.verdict === "miskoop"
+      ? `Ze vragen ${vraag} op Funda. Mijn model zegt ${fair}. Dat verschil van ${formatPercent(a.deltaPercentage, 0)} heet in de makelaardij 'potentie' en bij mij 'lucht'.`
+      : a.verdict === "koopje"
+        ? `Vraagprijs ${vraag} op Funda, terwijl ik ${fair} reken. Dat is ${formatPercent(Math.abs(a.deltaPercentage), 0)} onder mijn eerlijke prijs. Snel zijn.`
+        : `Vraagprijs ${vraag} op Funda, mijn eerlijke prijs ${fair}. Scheelt weinig — dit is een normale marktconform huis.`
+    : null;
+
+  const opener = vraagOpener ?? (
     a.verdict === "miskoop"
       ? pick(rand, [
           `Met een WOZ van ${woz} en een rente van ${rente} betaal je je blauw: ${maand} per maand voor een ${a.eraLabel}.`,
@@ -121,7 +130,7 @@ export function mockHouseVerdict(p: Property, mortgage: MortgageResult, a: House
         : pick(rand, [
             `WOZ ${woz}, ${maand} per maand bij ${rente}. Niet spectaculair, niet schandalig.`,
             `${p.woonoppervlakte} m² ${a.eraLabel} voor ${woz}. Netjes in lijn met de markt in ${p.woonplaats}.`,
-          ]);
+          ]));
 
   const risk = labelSlecht
     ? `Energielabel ${p.energielabel}: reken op een flinke isolatierekening of een stookrekening die pijn doet.`

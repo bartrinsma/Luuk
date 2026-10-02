@@ -15,9 +15,15 @@ npm run dev                  # http://localhost:3000
 | Route | Wat het doet | Backend |
 | --- | --- | --- |
 | `/` | De Alles-Weter: open vragen, Luuk antwoordt. Herkent kentekens/postcodes/URL's en stuurt door. | `POST /api/chat` |
-| `/huizen` | WOZ, bouwjaar, m², historische vraagprijzen, maandlasten (4,2% annuïtair, 30 jaar) en verdict "Koopje of Miskoop?". Postcode **of** straat + plaats, met slimme detectie. | `POST /api/huizen` (+ ruwe data: `POST /api/kadaster`) |
+| `/huizen` | WOZ, bouwjaar, m², historische vraagprijzen, maandlasten (4,2% annuïtair, 30 jaar) en verdict "Koopje of Miskoop?". Postcode, straat + plaats **of een Funda-link**, met slimme detectie. Gevelfoto (Street View → Funda → PDOK-luchtfoto) en foto-upload met AI-beoordeling van de staat. | `POST /api/huizen`, `POST /api/huizen/fotos`, `GET /api/huizen/streetview` (+ ruwe data: `POST /api/kadaster`) |
 | `/autos` | Geel kenteken-invoerveld, RDW-specs, dagwaarde via `V = P × (1 − r)^t` en Luuk's commentaar. | `POST /api/autos` (+ ruwe data: `GET /api/rdw?kenteken=`) |
 | `/roast` (ook `/web`) | Laadtijd, mobiele score, meta-tags/H1/alt-checks en een harde roast. | `POST /api/seo` |
+
+## Huizen: Funda, gevelfoto en foto-upload
+
+- **Funda-link** — het adres wordt uit de URL zelf gehaald (werkt altijd). Daarna probeert Luuk de advertentie één keer te lezen voor vraagprijs, m², bouwjaar en hoofdfoto. Funda blokkeert geautomatiseerde verzoeken vaak; dan blijft het bij het adres uit de URL. Is de vraagprijs bekend, dan vergelijkt het verdict díe met Luuk's eerlijke prijs. Let op: check of dit past binnen de gebruiksvoorwaarden van Funda voordat je het breed inzet.
+- **Gevelfoto** — Google Street View Static API via een server-proxy (`GOOGLE_MAPS_API_KEY` blijft op de server; eerst een gratis metadata-check of er beeld is). Zonder key: de Funda-foto, of een luchtfoto van PDOK (gratis, geen key). Bronnen die niet laden verdwijnen stil.
+- **Foto-upload** — tot 6 foto's, in de browser verkleind tot max 1280 px JPEG (EXIF/GPS verdwijnt daarmee). Claude beoordeelt via vision de staat (structured output: score 1–10, correctie −15% … +15%, bevindingen) en de code rekent de aangepaste eerlijke prijs uit. Foto's worden niet opgeslagen. Zonder `ANTHROPIC_API_KEY`: demo-modus, eerlijk gelabeld.
 
 ## Export & Share
 

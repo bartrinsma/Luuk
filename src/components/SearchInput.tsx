@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRight, Loader2, Sparkles, type LucideIcon } from "lucide-react";
-import { forwardRef, useState, type InputHTMLAttributes, type ReactNode } from "react";
+import { ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { forwardRef, useState, type ComponentType, type InputHTMLAttributes, type ReactNode } from "react";
 
 export const LUUK_PLACEHOLDER = "Ask Luuk? Sí!";
 
@@ -45,7 +45,7 @@ interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "
   onValueChange: (value: string) => void;
   onSubmit: () => void;
   loading?: boolean;
-  icon?: LucideIcon;
+  icon?: ComponentType<{ className?: string }>;
   /** Extra controls links van de submitknop (bijv. modus-toggle). */
   addon?: ReactNode;
 }
