@@ -37,7 +37,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              className="glass pointer-events-auto flex items-center gap-3 rounded-2xl px-5 py-3.5 text-sm text-white"
+              className="glass pointer-events-auto flex items-center gap-3 rounded-2xl px-5 py-3.5 text-sm text-ink"
               role="status"
             >
               {toast.tone === "success" ? <CheckCircle2 className="h-5 w-5 text-neon" /> : <Info className="h-5 w-5 text-cyan" />}

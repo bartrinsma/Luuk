@@ -1,5 +1,6 @@
 import { generateLuuk } from "@/lib/ai/llm";
 import { mockChat } from "@/lib/ai/mockLuuk";
+import { track } from "@/lib/analytics/track";
 import { CHAT_SYSTEM_PROMPT } from "@/lib/ai/prompts";
 import { GARBLED_REQUEST, luukError, OOPS, readJson } from "@/lib/api";
 import type { ChatResponse } from "@/lib/types";
@@ -19,7 +20,9 @@ export async function POST(request: Request) {
       user: query,
       fallback: () => mockChat(query),
     });
-    return Response.json({ answer: text, source, suggestion: detectIntent(query) } satisfies ChatResponse);
+    const suggestion = detectIntent(query);
+    track(request, { module: "chat", input: query, meta: { source, suggestion } });
+    return Response.json({ answer: text, source, suggestion } satisfies ChatResponse);
   } catch (err) {
     console.error("[api/chat]", err);
     return luukError(OOPS, 500);

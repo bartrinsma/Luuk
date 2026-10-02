@@ -52,10 +52,10 @@ export function ResultCard({ children, title, icon, aside, className = "" }: Res
 
 export function Stat({ label, value, sub, accent }: { label: string; value: ReactNode; sub?: ReactNode; accent?: boolean }) {
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+    <div className="rounded-2xl border border-ink/[0.06] bg-ink/[0.02] p-4">
       <div className="text-xs font-medium uppercase tracking-wider text-muted">{label}</div>
-      <div className={`mt-1.5 font-mono text-2xl font-semibold tracking-tight sm:text-[1.7rem] ${accent ? "text-cyan" : "text-white"}`}>{value}</div>
-      {sub && <div className="mt-1 text-xs text-white/40">{sub}</div>}
+      <div className={`mt-1.5 font-mono text-2xl font-semibold tracking-tight sm:text-[1.7rem] ${accent ? "text-cyan" : "text-ink"}`}>{value}</div>
+      {sub && <div className="mt-1 text-xs text-ink/40">{sub}</div>}
     </div>
   );
 }
@@ -63,8 +63,8 @@ export function Stat({ label, value, sub, accent }: { label: string; value: Reac
 export function SourceBadge({ children, tone = "neutral" }: { children: ReactNode; tone?: "live" | "neutral" | "demo" }) {
   const styles = {
     live: "border-neon/30 bg-neon/10 text-neon",
-    neutral: "border-cyan/25 bg-cyan/10 text-cyan",
-    demo: "border-white/10 bg-white/5 text-muted",
+    neutral: "border-cyan/25 bg-cyan/10 text-cyan-ink",
+    demo: "border-ink/10 bg-ink/5 text-muted",
   }[tone];
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${styles}`}>

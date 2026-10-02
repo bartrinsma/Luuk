@@ -10,19 +10,25 @@ export type HouseVerdictKind = "koopje" | "eerlijk" | "miskoop";
 export interface HouseAnalysis {
   fairPrice: number;
   verdict: HouseVerdictKind;
-  deltaPercentage: number; // WOZ t.o.v. eerlijke prijs
+  /** Prijs waarmee Luuk de eerlijke prijs vergelijkt: de Funda-vraagprijs als die bekend is, anders de WOZ. */
+  comparedTo: "vraagprijs" | "woz";
+  comparedPrice: number;
+  deltaPercentage: number; // vergeleken prijs t.o.v. eerlijke prijs
   m2VsRegionPercentage: number;
   eraLabel: string;
 }
 
-export function analyzeHouse(p: Property): HouseAnalysis {
+export function analyzeHouse(p: Property, vraagprijs: number | null = null): HouseAnalysis {
   const era = eraOf(p.bouwjaar);
   const fairRaw = p.woonoppervlakte * p.regioPrijsPerM2 * era.factor * (LABEL_FACTOR[p.energielabel] ?? 1);
   const fairPrice = Math.round(fairRaw / 5000) * 5000;
-  const deltaPercentage = ((p.wozWaarde - fairPrice) / fairPrice) * 100;
+  const comparedPrice = vraagprijs ?? p.wozWaarde;
+  const deltaPercentage = ((comparedPrice - fairPrice) / fairPrice) * 100;
 
   return {
     fairPrice,
+    comparedTo: vraagprijs ? "vraagprijs" : "woz",
+    comparedPrice,
     verdict: deltaPercentage <= -4 ? "koopje" : deltaPercentage <= 5 ? "eerlijk" : "miskoop",
     deltaPercentage,
     m2VsRegionPercentage: ((p.prijsPerM2 - p.regioPrijsPerM2) / p.regioPrijsPerM2) * 100,

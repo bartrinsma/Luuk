@@ -15,9 +15,15 @@ npm run dev                  # http://localhost:3000
 | Route | Wat het doet | Backend |
 | --- | --- | --- |
 | `/` | De Alles-Weter: open vragen, Luuk antwoordt. Herkent kentekens/postcodes/URL's en stuurt door. | `POST /api/chat` |
-| `/huizen` | WOZ, bouwjaar, m², historische vraagprijzen, maandlasten (4,2% annuïtair, 30 jaar) en verdict "Koopje of Miskoop?". Postcode **of** straat + plaats, met slimme detectie. | `POST /api/huizen` (+ ruwe data: `POST /api/kadaster`) |
+| `/huizen` | WOZ, bouwjaar, m², historische vraagprijzen, maandlasten (4,2% annuïtair, 30 jaar) en verdict "Koopje of Miskoop?". Postcode, straat + plaats **of een Funda-link**, met slimme detectie. Gevelfoto (Street View → Funda → PDOK-luchtfoto) en foto-upload met AI-beoordeling van de staat. | `POST /api/huizen`, `POST /api/huizen/fotos`, `GET /api/huizen/streetview` (+ ruwe data: `POST /api/kadaster`) |
 | `/autos` | Geel kenteken-invoerveld, RDW-specs, dagwaarde via `V = P × (1 − r)^t` en Luuk's commentaar. | `POST /api/autos` (+ ruwe data: `GET /api/rdw?kenteken=`) |
 | `/roast` (ook `/web`) | Laadtijd, mobiele score, meta-tags/H1/alt-checks en een harde roast. | `POST /api/seo` |
+
+## Huizen: Funda, gevelfoto en foto-upload
+
+- **Funda-link** — het adres wordt uit de URL zelf gehaald (werkt altijd). Daarna probeert Luuk de advertentie één keer te lezen voor vraagprijs, m², bouwjaar en hoofdfoto. Funda blokkeert geautomatiseerde verzoeken vaak; dan blijft het bij het adres uit de URL. Is de vraagprijs bekend, dan vergelijkt het verdict díe met Luuk's eerlijke prijs. Let op: check of dit past binnen de gebruiksvoorwaarden van Funda voordat je het breed inzet.
+- **Gevelfoto** — Google Street View Static API via een server-proxy (`GOOGLE_MAPS_API_KEY` blijft op de server; eerst een gratis metadata-check of er beeld is). Zonder key: de Funda-foto, of een luchtfoto van PDOK (gratis, geen key). Bronnen die niet laden verdwijnen stil.
+- **Foto-upload** — tot 6 foto's, in de browser verkleind tot max 1280 px JPEG (EXIF/GPS verdwijnt daarmee). Claude beoordeelt via vision de staat (structured output: score 1–10, correctie −15% … +15%, bevindingen) en de code rekent de aangepaste eerlijke prijs uit. Foto's worden niet opgeslagen. Zonder `ANTHROPIC_API_KEY`: demo-modus, eerlijk gelabeld.
 
 ## Export & Share
 
@@ -28,6 +34,19 @@ Onder elke analyse (huis, auto, website) staat een actiebalk:
 - **WhatsApp** — `https://wa.me/?text=…` met emoji-opmaak en een deel-link (`/autos?q=…`, `/huizen?q=…`, `/roast?q=…`) die de analyse direct opnieuw draait.
 
 Eén isomorf rapportmodel (`src/lib/report.ts`) voedt alle drie de kanalen.
+
+## Admin & analytics (`/admin`)
+
+Achter `ADMIN_PASSWORD` (HttpOnly-sessiecookie, 7 dagen; zonder variabele staat `/admin` dicht).
+
+- **Dashboard** — aanvragen per onderdeel en per dag, unieke bezoekers, deel-acties, ongeldige invoer, koopje/miskoop-verdeling, piekuren, top woonplaatsen/automerken/websites. Periode: 7/30/90/365 dagen of alles.
+- **Provincies** — ranglijst op *nieuwsgierigheid* (aanvragen per 100.000 inwoners, CBS 2024), absolute aanvragen en gezochte huizen per provincie, met gemiddelde WOZ en miskoop-aandeel.
+- **Aanvragen** — elke ingevoerde postcode/Funda-link, elk kenteken en elke URL, met resultaat en status. Filters op onderdeel, status, provincie, periode en zoekterm; CSV-export (Excel-klaar).
+- **Blog-inzichten** — automatisch geschreven feitjes in Luuk's toon ("De Utrechters zijn het nieuwsgierigst…") met onderbouwing en een *te weinig data*-label, klaar om te kopiëren.
+
+**Hoe er gemeten wordt.** Elke API-route logt na het antwoord (`next/server` `after`) één event in `luuk_events`. Er wordt geen IP-adres en geen e-mailadres opgeslagen; bezoekers worden geteld met een dagelijks wisselende hash (zoals Plausible). De *bezoekersprovincie* komt uit de geo-header van Netlify (`x-nf-geo`) en werkt dus alleen live; de *woningprovincie* uit PDOK of de postcode. Let op: kentekens en adressen die bezoekers invoeren worden wél bewaard — vermeld dat in je privacyverklaring.
+
+**Opslag.** Zet `DATABASE_URL` (of gebruik Netlify DB, dat `NETLIFY_DATABASE_URL` zet). Zonder database gebruikt Luuk PGlite: lokaal in `.data/pglite`, op serverless in `/tmp` — dat laatste is **niet blijvend**, het dashboard waarschuwt daarvoor.
 
 ## Architectuur
 

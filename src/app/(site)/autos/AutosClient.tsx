@@ -49,7 +49,7 @@ export function AutosClient({ initialQuery }: { initialQuery: string }) {
         compact={loading || !!data}
       >
         <LicensePlateInput value={plate} onValueChange={setPlate} onSubmit={() => submit()} loading={loading} autoFocus />
-        <p className="mt-3 text-center text-xs text-white/35">Elk Nederlands kenteken. Streepjes doet Luuk zelf.</p>
+        <p className="mt-3 text-center text-xs text-ink/35">Elk Nederlands kenteken. Streepjes doet Luuk zelf.</p>
       </PageHero>
 
       <div className="mt-8 w-full">
@@ -74,7 +74,7 @@ function CarResult({ data }: { data: CarResponse }) {
         <div className="flex items-center gap-3">
           <span className="rounded-md border-2 border-black/80 bg-plate px-2.5 py-0.5 font-mono text-lg font-black tracking-widest text-black">{v.kentekenFormatted}</span>
           <div>
-            <div className="text-lg font-semibold text-white">{name}</div>
+            <div className="text-lg font-semibold text-ink">{name}</div>
             <div className="text-sm text-muted">{[v.inrichting, v.kleur && cap(v.kleur)].filter(Boolean).join(" · ")}</div>
           </div>
         </div>
@@ -93,18 +93,18 @@ function CarResult({ data }: { data: CarResponse }) {
         />
         <div className="relative mx-auto mt-6 flex max-w-lg flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
           <span>
-            Nieuw <span className="font-mono text-white">{formatEuro(val.originalPrice)}</span>
+            Nieuw <span className="font-mono text-ink">{formatEuro(val.originalPrice)}</span>
           </span>
-          <span className="text-white/20">→</span>
+          <span className="text-ink/20">→</span>
           <span>
-            nog <span className="font-mono text-white">{formatPercent(val.retainedPercentage, 0)}</span> over
+            nog <span className="font-mono text-ink">{formatPercent(val.retainedPercentage, 0)}</span> over
           </span>
-          <span className="text-white/20">·</span>
-          <span className="text-white/50">{PRICE_SOURCE_LABEL[data.priceSource]}</span>
+          <span className="text-ink/20">·</span>
+          <span className="text-ink/50">{PRICE_SOURCE_LABEL[data.priceSource]}</span>
         </div>
-        <div className="relative mx-auto mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/[0.08] bg-black/30 px-4 py-2 font-mono text-xs text-white/60 sm:text-sm">
+        <div className="relative mx-auto mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-ink/[0.08] bg-ink/[0.04] px-4 py-2 font-mono text-xs text-ink/60 sm:text-sm">
           V = {formatEuro(val.originalPrice)} × (1 − {val.depreciationRate.toFixed(2)})
-          <sup className="-ml-1.5">{val.ageYears.toFixed(1)}</sup> = <span className="text-cyan">{formatEuro(val.currentValue)}</span>
+          <sup className="-ml-1.5">{val.ageYears.toFixed(1)}</sup> = <span className="text-cyan-ink">{formatEuro(val.currentValue)}</span>
         </div>
       </motion.section>
 
@@ -128,14 +128,14 @@ function CarResult({ data }: { data: CarResponse }) {
           <div className="flex flex-col gap-5">
             <div>
               <div className="text-xs uppercase tracking-wider text-muted">Verdampt</div>
-              <AnimatedNumber value={val.totalDepreciation} format={formatEuro} delay={0.3} className="mt-1 block font-mono text-4xl font-bold tracking-tight text-white" />
+              <AnimatedNumber value={val.totalDepreciation} format={formatEuro} delay={0.3} className="mt-1 block font-mono text-4xl font-bold tracking-tight text-ink" />
             </div>
             <div>
               <div className="mb-2 flex justify-between text-xs text-muted">
                 <span>Restwaarde</span>
                 <span>{formatPercent(val.retainedPercentage, 0)}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
+              <div className="h-2 overflow-hidden rounded-full bg-ink/[0.06]">
                 <motion.div
                   initial={{ width: "100%" }}
                   animate={{ width: `${val.retainedPercentage}%` }}

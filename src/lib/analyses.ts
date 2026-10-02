@@ -2,11 +2,13 @@ import { analyzeHouse, maxCarBid } from "@/lib/analysis";
 import { aiEnabled, generateLuuk } from "@/lib/ai/llm";
 import { mockCarVerdict, mockHouseVerdict, mockSeoVerdict } from "@/lib/ai/mockLuuk";
 import { carPriceEstimatePrompt, carVerdictPrompt, houseVerdictPrompt, seoVerdictPrompt } from "@/lib/ai/prompts";
-import { fetchProperty } from "@/lib/services/kadaster";
+import type { HouseInput } from "@/lib/houseInput";
+import { fetchFundaListing, type FundaListing } from "@/lib/services/funda";
+import { resolveHousePhotos } from "@/lib/services/housePhotos";
+import { fetchProperty, type Property } from "@/lib/services/kadaster";
 import { fetchVehicle, type Vehicle } from "@/lib/services/rdw";
 import { analyzeWebsite } from "@/lib/services/seo";
 import type { CarResponse, HouseResponse, SeoResponse } from "@/lib/types";
-import type { AddressQuery } from "@/lib/validation";
 import { calculateAgeInYears, calculateCarValue, DEFAULT_DEPRECIATION_RATE, estimateCatalogPrice } from "@/utils/calculateCarValue";
 import { calculateMortgage, DEFAULT_INTEREST_RATE, DEFAULT_TERM_YEARS } from "@/utils/calculateMortgage";
 
@@ -18,19 +20,46 @@ import { calculateMortgage, DEFAULT_INTEREST_RATE, DEFAULT_TERM_YEARS } from "@/
 
 // ---------- Huizen ----------
 
-export async function analyzeHouseRequest(query: AddressQuery): Promise<HouseResponse> {
-  const { property, source } = await fetchProperty(query);
+/** Data + berekeningen, zonder LLM. Gebruikt door de hoofdanalyse én de foto-analyse. */
+export async function buildHouseData(input: HouseInput) {
+  const query = input.kind === "funda" ? input.funda.address : input.query;
+  const [{ property: base, source }, funda] = await Promise.all([
+    fetchProperty(query),
+    input.kind === "funda" ? fetchFundaListing(input.funda) : Promise.resolve(null),
+  ]);
+
+  // Wat de advertentie zegt over m² en bouwjaar is betrouwbaarder dan het model.
+  const property = funda ? applyFunda(base, funda) : base;
   const mortgage = calculateMortgage(property.wozWaarde, DEFAULT_INTEREST_RATE, DEFAULT_TERM_YEARS);
-  const analysis = analyzeHouse(property);
+  const analysis = analyzeHouse(property, funda?.vraagprijs ?? null);
+  return { property, source, funda, mortgage, analysis };
+}
 
-  const verdict = await generateLuuk({
-    system: houseVerdictPrompt({ property, mortgage, analysis }),
-    user: "Koopje of miskoop?",
-    fallback: () => mockHouseVerdict(property, mortgage, analysis),
-    maxTokens: 500,
-  });
+export async function analyzeHouseRequest(input: HouseInput): Promise<HouseResponse> {
+  const { property, source, funda, mortgage, analysis } = await buildHouseData(input);
 
-  return { property, dataSource: source, mortgage, analysis, verdict: verdict.text, verdictSource: verdict.source };
+  const [verdict, photos] = await Promise.all([
+    generateLuuk({
+      system: houseVerdictPrompt({ property, mortgage, analysis, funda }),
+      user: "Koopje of miskoop?",
+      fallback: () => mockHouseVerdict(property, mortgage, analysis),
+      maxTokens: 500,
+    }),
+    resolveHousePhotos(property, funda),
+  ]);
+
+  return { property, dataSource: source, mortgage, analysis, funda, photos, verdict: verdict.text, verdictSource: verdict.source };
+}
+
+function applyFunda(p: Property, f: FundaListing): Property {
+  const woonoppervlakte = f.woonoppervlakte ?? p.woonoppervlakte;
+  return {
+    ...p,
+    woonoppervlakte,
+    bouwjaar: f.bouwjaar ?? p.bouwjaar,
+    woningtype: f.woningtype ?? p.woningtype,
+    prijsPerM2: Math.round(p.wozWaarde / woonoppervlakte),
+  };
 }
 
 // ---------- Auto's ----------

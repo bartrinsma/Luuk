@@ -26,6 +26,15 @@ export function ActionBar({ report }: { report: ShareReport }) {
     timers.current.push(setTimeout(() => set(id, "idle"), 2200));
   };
   const url = () => shareUrl(window.location.origin, report);
+  const beacon = (action: "pdf" | "whatsapp") => {
+    try {
+      const payload = JSON.stringify({ action, kind: report.kind, subject: report.subject });
+      if (!navigator.sendBeacon?.("/api/track", new Blob([payload], { type: "application/json" })))
+        fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }).catch(() => {});
+    } catch {
+      /* analytics mag nooit iets breken */
+    }
+  };
 
   const downloadPdf = async () => {
     set("pdf", "busy");
@@ -40,6 +49,7 @@ export function ActionBar({ report }: { report: ShareReport }) {
       a.click();
       setTimeout(() => URL.revokeObjectURL(href), 10_000);
       flash("pdf");
+      beacon("pdf");
       toast("Rapport gedownload. De waarheid op papier. Sí.");
     } catch (err) {
       console.error(err);
@@ -51,6 +61,7 @@ export function ActionBar({ report }: { report: ShareReport }) {
   const shareWhatsapp = () => {
     window.open(whatsappUrl(whatsappText(report, url())), "_blank", "noopener,noreferrer");
     flash("whatsapp");
+    beacon("whatsapp");
     toast("Doorgestuurd naar WhatsApp. Luuk out.");
   };
 
@@ -107,8 +118,8 @@ function ActionPill({
   const done = state === "done";
   const base =
     tone === "whatsapp"
-      ? "border-emerald-400/20 text-emerald-300 hover:border-emerald-400/40 hover:bg-emerald-400/10"
-      : `border-white/10 text-white/85 hover:border-cyan/40 hover:text-white ${active ? "border-cyan/40 bg-cyan/10 text-white" : ""}`;
+      ? "border-emerald-400/20 text-emerald-600 hover:border-emerald-400/40 hover:bg-emerald-400/10"
+      : `border-ink/10 text-ink/85 hover:border-cyan/40 hover:text-ink ${active ? "border-cyan/40 bg-cyan/10 text-ink" : ""}`;
 
   return (
     <motion.button
@@ -116,7 +127,7 @@ function ActionPill({
       onClick={onClick}
       disabled={state === "busy"}
       whileTap={{ scale: 0.96 }}
-      animate={done ? { boxShadow: ["0 0 0 0 rgb(57 255 136 / 0)", "0 0 28px 2px rgb(57 255 136 / 0.45)", "0 0 0 0 rgb(57 255 136 / 0)"] } : {}}
+      animate={done ? { boxShadow: ["0 0 0 0 rgb(16 185 129 / 0)", "0 0 28px 2px rgb(16 185 129 / 0.45)", "0 0 0 0 rgb(16 185 129 / 0)"] } : {}}
       transition={{ duration: 1.4 }}
       className={`glass flex h-11 items-center gap-2 rounded-full! px-4 text-sm font-medium transition-colors disabled:opacity-60 ${
         done ? "border-neon/50! text-neon!" : base
@@ -187,8 +198,8 @@ function EmailPanel({
     >
       <div className="panel flex flex-col gap-3 rounded-3xl p-5">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold text-white">Stuur deze analyse per e-mail</div>
-          <button type="button" onClick={onClose} aria-label="Sluiten" className="rounded-full p-1.5 text-muted transition-colors hover:bg-white/5 hover:text-white">
+          <div className="text-sm font-semibold text-ink">Stuur deze analyse per e-mail</div>
+          <button type="button" onClick={onClose} aria-label="Sluiten" className="rounded-full p-1.5 text-muted transition-colors hover:bg-ink/5 hover:text-ink">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -201,7 +212,7 @@ function EmailPanel({
             value={to}
             onChange={(e) => setTo(e.target.value)}
             placeholder="jij@voorbeeld.nl"
-            className="h-11 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 text-white placeholder:text-white/30 focus:border-cyan/50 focus:outline-none"
+            className="h-11 rounded-xl border border-ink/10 bg-ink/[0.03] px-3.5 text-ink placeholder:text-ink/30 focus:border-cyan/50 focus:outline-none"
           />
         </label>
         <label className="flex flex-col gap-1.5">
@@ -211,15 +222,15 @@ function EmailPanel({
             onChange={(e) => setMessage(e.target.value.slice(0, 500))}
             rows={2}
             placeholder="Schat, moeten we dit doen?"
-            className="resize-none rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-cyan/50 focus:outline-none"
+            className="resize-none rounded-xl border border-ink/10 bg-ink/[0.03] px-3.5 py-2.5 text-ink placeholder:text-ink/30 focus:border-cyan/50 focus:outline-none"
           />
         </label>
-        {error && <p className="text-sm text-white/80">{error}</p>}
+        {error && <p className="text-sm text-ink/80">{error}</p>}
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={busy || !to.trim()}
-            className="flex h-11 items-center gap-2 rounded-full bg-cyan px-5 font-semibold text-obsidian transition-shadow hover:shadow-[0_0_28px_-4px_rgb(0_229_255/0.9)] disabled:opacity-40"
+            className="flex h-11 items-center gap-2 rounded-full bg-cyan px-5 font-semibold text-white transition-shadow hover:shadow-[0_0_28px_-4px_rgb(14_165_233/0.5)] disabled:opacity-40"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Versturen

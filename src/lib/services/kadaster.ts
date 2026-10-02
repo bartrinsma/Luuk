@@ -1,4 +1,5 @@
 import { between, intBetween, pick, seededRandom } from "@/lib/seed";
+import { normalizeProvince, provinceFromCity, provinceFromPostcode } from "@/lib/provinces";
 import { formatPostcode, type AddressQuery } from "@/lib/validation";
 
 export interface HistoricalAskingPrice {
@@ -22,6 +23,9 @@ export interface Property {
   prijsPerM2: number;
   regioPrijsPerM2: number;
   historischeVraagprijzen: HistoricalAskingPrice[];
+  /** WGS84-coördinaten, als het adres via PDOK is gevonden. */
+  coords: { lat: number; lon: number } | null;
+  provincie: string | null;
 }
 
 export interface PropertyResult {
@@ -101,6 +105,8 @@ interface ResolvedAddress {
   huisnummer: string;
   postcode: string | null;
   woonplaats: string;
+  coords: { lat: number; lon: number } | null;
+  provincie: string | null;
 }
 
 async function resolveAddressViaPdok(query: AddressQuery): Promise<ResolvedAddress | null> {
@@ -121,7 +127,15 @@ async function resolveAddressViaPdok(query: AddressQuery): Promise<ResolvedAddre
     huisnummer: doc.huis_nlt ?? String(query.huisnummer),
     postcode: doc.postcode ?? null,
     woonplaats: doc.woonplaatsnaam,
+    coords: parsePoint(doc.centroide_ll),
+    provincie: doc.provincienaam ?? null,
   };
+}
+
+/** PDOK levert "POINT(lon lat)". */
+function parsePoint(wkt: string | undefined): { lat: number; lon: number } | null {
+  const m = wkt && /POINT\(([-\d.]+) ([-\d.]+)\)/.exec(wkt);
+  return m ? { lon: Number(m[1]), lat: Number(m[2]) } : null;
 }
 
 // ---------- Fallback Mocking Service ----------
@@ -225,6 +239,8 @@ export function mockProperty(query: AddressQuery, resolved: ResolvedAddress | nu
     prijsPerM2: Math.round(wozWaarde / woonoppervlakte),
     regioPrijsPerM2: region.m2,
     historischeVraagprijzen: historicalPrices(rand, wozWaarde, bouwjaar, now),
+    coords: resolved?.coords ?? null,
+    provincie: normalizeProvince(resolved?.provincie) ?? provinceFromPostcode(postcode) ?? provinceFromCity(woonplaats),
   };
 }
 

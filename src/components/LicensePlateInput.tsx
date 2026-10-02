@@ -28,7 +28,7 @@ export const LicensePlateInput = forwardRef<HTMLInputElement, LicensePlateInputP
       className="w-full"
     >
       <OmnibarShell focused={focused}>
-        <label className="flex h-16 min-w-0 flex-1 overflow-hidden rounded-2xl border-2 border-black/80 bg-plate shadow-[inset_0_-3px_0_rgb(0_0_0/0.15),0_8px_30px_-10px_rgb(247_198_0/0.5)] sm:h-[4.5rem]">
+        <label className="flex h-16 min-w-0 flex-1 overflow-hidden rounded-2xl border-2 border-black/80 bg-plate shadow-[inset_0_-3px_0_rgb(0_0_0/0.15),0_8px_30px_-10px_rgb(247_198_0/0.35)] sm:h-[4.5rem]">
           <span className="flex w-10 shrink-0 flex-col items-center justify-end bg-eu pb-1.5 text-white sm:w-12" aria-hidden>
             <EuStars />
             <span className="mt-1 text-sm font-bold leading-none sm:text-base">NL</span>
