@@ -8,9 +8,11 @@ import { LuukMessage, Thinking } from "@/components/LuukMessage";
 import { LuukVerdict } from "@/components/LuukVerdict";
 import { PageHero } from "@/components/PageHero";
 import { ResultCard, ResultStack, SourceBadge, Stat, rise } from "@/components/ResultCard";
+import { ActionBar } from "@/components/share/ActionBar";
 import { SearchInput } from "@/components/SearchInput";
 import { formatEuro, formatEuroCents, formatNumber, formatPercent } from "@/lib/format";
 import type { HouseResponse } from "@/lib/types";
+import { houseReport } from "@/lib/report";
 import { useLuuk } from "@/lib/useLuuk";
 import { detectAddressMode, parseAddressQuery } from "@/lib/validation";
 
@@ -185,6 +187,7 @@ function HouseResult({ data }: { data: HouseResponse }) {
       </ResultCard>
 
       <LuukVerdict title="Luuk's Verdict — Koopje of Miskoop?" text={data.verdict} source={data.verdictSource} stamp={stamp} />
+      <ActionBar report={houseReport(data)} />
     </ResultStack>
   );
 }

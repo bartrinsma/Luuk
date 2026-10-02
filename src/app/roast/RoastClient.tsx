@@ -8,8 +8,10 @@ import { LuukMessage, Thinking } from "@/components/LuukMessage";
 import { LuukVerdict } from "@/components/LuukVerdict";
 import { PageHero } from "@/components/PageHero";
 import { ResultCard, ResultStack, SourceBadge, Stat, rise } from "@/components/ResultCard";
+import { ActionBar } from "@/components/share/ActionBar";
 import { SearchInput } from "@/components/SearchInput";
 import type { SeoResponse } from "@/lib/types";
+import { seoReport } from "@/lib/report";
 import { useLuuk } from "@/lib/useLuuk";
 import { normalizeUrl } from "@/lib/validation";
 
@@ -129,6 +131,7 @@ function RoastResult({ data }: { data: SeoResponse }) {
       </motion.div>
 
       <LuukVerdict title="Luuk's Roast" text={data.verdict} source={data.verdictSource} stamp={stamp} />
+      <ActionBar report={seoReport(data)} />
     </ResultStack>
   );
 }

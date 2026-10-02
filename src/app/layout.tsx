@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
+import { ToastProvider } from "@/components/share/Toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Background />
         <div className="relative z-10 flex min-h-screen flex-col">
           <Header />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <ToastProvider>
+            <main className="flex flex-1 flex-col">{children}</main>
+          </ToastProvider>
           <footer className="px-6 pb-8 pt-16 text-center text-xs text-white/30">
             Luuk.si — indicaties, geen financieel advies. Al heeft Luuk meestal gelijk. Sí.
           </footer>

@@ -9,8 +9,10 @@ import { LuukMessage, Thinking } from "@/components/LuukMessage";
 import { LuukVerdict } from "@/components/LuukVerdict";
 import { PageHero } from "@/components/PageHero";
 import { ResultCard, ResultStack, SourceBadge, Stat, rise } from "@/components/ResultCard";
+import { ActionBar } from "@/components/share/ActionBar";
 import { formatEuro, formatNumber, formatPercent } from "@/lib/format";
 import type { CarResponse } from "@/lib/types";
+import { carReport } from "@/lib/report";
 import { useLuuk } from "@/lib/useLuuk";
 import { formatKenteken, isValidKenteken, kentekenError } from "@/lib/validation";
 
@@ -154,6 +156,7 @@ function CarResult({ data }: { data: CarResponse }) {
       </div>
 
       <LuukVerdict title="Luuk's Commentaar" text={data.verdict} source={data.verdictSource} />
+      <ActionBar report={carReport(data)} />
     </ResultStack>
   );
 }

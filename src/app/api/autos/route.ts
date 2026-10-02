@@ -1,4 +1,4 @@
-import { analyzeCarRequest } from "./service";
+import { analyzeCarRequest } from "@/lib/analyses";
 import { luukError, OOPS, readJson } from "@/lib/api";
 import { isValidKenteken, kentekenError } from "@/lib/validation";
 

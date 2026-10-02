@@ -19,6 +19,16 @@ npm run dev                  # http://localhost:3000
 | `/autos` | Geel kenteken-invoerveld, RDW-specs, dagwaarde via `V = P × (1 − r)^t` en Luuk's commentaar. | `POST /api/autos` (+ ruwe data: `GET /api/rdw?kenteken=`) |
 | `/roast` (ook `/web`) | Laadtijd, mobiele score, meta-tags/H1/alt-checks en een harde roast. | `POST /api/seo` |
 
+## Export & Share
+
+Onder elke analyse (huis, auto, website) staat een actiebalk:
+
+- **Download PDF** — printklaar A4-rapport via `@react-pdf/renderer`, volledig in de browser en lazy geladen bij de eerste klik.
+- **Stuur naar jezelf (of je partner)** — `POST /api/share/email` verstuurt een HTML-mail via **Resend**. De client stuurt alleen `{ kind, query, to, message }`; de server draait de analyse opnieuw en bouwt de mail zelf, zodat de route niet als open relay te misbruiken is. Rate-limit: 5 per IP en 3 per ontvanger per 10 minuten (in-memory). Zonder `RESEND_API_KEY` draait dit in demo-modus: er wordt niets verstuurd en de toast zegt dat ook.
+- **WhatsApp** — `https://wa.me/?text=…` met emoji-opmaak en een deel-link (`/autos?q=…`, `/huizen?q=…`, `/roast?q=…`) die de analyse direct opnieuw draait.
+
+Eén isomorf rapportmodel (`src/lib/report.ts`) voedt alle drie de kanalen.
+
 ## Architectuur
 
 ```
@@ -26,7 +36,11 @@ src/
 ├─ app/                     pagina's (server) + *Client.tsx (interactief) + api/ route handlers
 ├─ components/              Header, NavigationTabs, SearchInput (Omnibar), LicensePlateInput,
 │                           ResultCard, AnimatedNumber, LuukVerdict, LuukMessage, Background
+├─ components/share/       ActionBar, ReportPdf, Toast
 ├─ lib/
+│  ├─ analyses.ts           volledige analyse per module (gedeeld door routes en e-mail)
+│  ├─ report.ts             rapportmodel + WhatsApp-tekst + deel-links
+│  ├─ email.ts              HTML/tekst-template voor de mail
 │  ├─ ai/llm.ts             provider-switch (Anthropic / OpenAI / mock) met automatische fallback
 │  ├─ ai/prompts.ts         system prompts — data gaat als JSON de prompt in
 │  ├─ ai/mockLuuk.ts        gesimuleerde Luuk-antwoorden zolang er geen API-key is

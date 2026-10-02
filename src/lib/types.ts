@@ -42,3 +42,5 @@ export interface SeoResponse {
   verdict: string;
   verdictSource: LuukSource;
 }
+
+export type EmailShareResponse = { status: "sent"; id: string | null } | { status: "preview" };
