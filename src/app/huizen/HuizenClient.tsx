@@ -68,16 +68,16 @@ export function HuizenClient({ initialQuery }: { initialQuery: string }) {
                   setMode(m);
                   setModeLocked(true);
                 }}
-                className={`relative rounded-full px-4 py-1.5 font-medium transition-colors ${mode === m ? "text-obsidian" : "text-muted hover:text-white"}`}
+                className={`relative rounded-full px-4 py-1.5 font-medium transition-colors ${mode === m ? "text-white" : "text-muted hover:text-ink"}`}
               >
-                {mode === m && <motion.span layoutId="addr-mode" className="absolute inset-0 rounded-full bg-white" transition={{ type: "spring", stiffness: 420, damping: 34 }} />}
+                {mode === m && <motion.span layoutId="addr-mode" className="absolute inset-0 rounded-full bg-ink" transition={{ type: "spring", stiffness: 420, damping: 34 }} />}
                 <span className="relative">{m === "postcode" ? "Postcode" : "Straat & plaats"}</span>
               </button>
             ))}
           </div>
         </div>
         <SearchInput value={query} onValueChange={onChange} onSubmit={() => submit()} loading={loading} icon={MapPin} autoFocus />
-        <p className="mt-3 text-center text-xs text-white/35">{HINTS[mode]}</p>
+        <p className="mt-3 text-center text-xs text-ink/35">{HINTS[mode]}</p>
       </PageHero>
 
       <div className="mt-8 w-full">
@@ -104,7 +104,7 @@ function HouseResult({ data }: { data: HouseResponse }) {
     <ResultStack key={p.adres}>
       <motion.div variants={rise} className="flex flex-wrap items-center justify-between gap-3 px-1">
         <div>
-          <div className="text-lg font-semibold text-white">{p.adres}</div>
+          <div className="text-lg font-semibold text-ink">{p.adres}</div>
           <div className="text-sm text-muted">{p.woningtype}</div>
         </div>
         <SourceBadge tone={data.dataSource === "kadaster" ? "live" : data.dataSource === "pdok+model" ? "neutral" : "demo"}>
@@ -113,8 +113,8 @@ function HouseResult({ data }: { data: HouseResponse }) {
       </motion.div>
 
       {/* De Data-Dump */}
-      <ResultCard title="WOZ-waarde" icon={<Building2 className="h-3.5 w-3.5" />} aside={<span className="text-xs text-white/40">peiljaar {p.wozPeiljaar}</span>}>
-        <AnimatedNumber value={p.wozWaarde} format={formatEuro} className="price-glow block font-mono text-6xl font-bold tracking-tighter text-white sm:text-8xl" />
+      <ResultCard title="WOZ-waarde" icon={<Building2 className="h-3.5 w-3.5" />} aside={<span className="text-xs text-ink/40">peiljaar {p.wozPeiljaar}</span>}>
+        <AnimatedNumber value={p.wozWaarde} format={formatEuro} className="price-glow block font-mono text-6xl font-bold tracking-tighter text-ink sm:text-8xl" />
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Stat label="Bouwjaar" value={p.bouwjaar} sub={a.eraLabel} />
           <Stat label="Woonoppervlakte" value={`${p.woonoppervlakte} m²`} sub={p.perceeloppervlakte ? `perceel ${formatNumber(p.perceeloppervlakte)} m²` : "geen perceel"} />
@@ -128,18 +128,18 @@ function HouseResult({ data }: { data: HouseResponse }) {
       </ResultCard>
 
       {/* Maandlasten */}
-      <ResultCard title="Maandlasten" icon={<Calculator className="h-3.5 w-3.5" />} aside={<span className="text-xs text-white/40">100% financiering · annuïtair</span>}>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <ResultCard title="Maandlasten" icon={<Calculator className="h-3.5 w-3.5" />} aside={<span className="text-xs text-ink/40">100% financiering · annuïtair</span>}>
+        <div className="flex flex-col gap-6">
           <div>
             <div className="flex items-baseline gap-2">
               <AnimatedNumber value={m.monthlyPayment} format={formatEuroCents} delay={0.2} className="font-mono text-5xl font-bold tracking-tighter text-cyan sm:text-6xl" />
-              <span className="text-muted">/ maand</span>
+              <span className="whitespace-nowrap text-muted">/ maand</span>
             </div>
             <p className="mt-2 text-sm text-muted">
               Bruto, {formatPercent(m.annualRate * 100)} rente over {m.termYears} jaar op {formatEuro(m.principal)}.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 lg:w-[25rem] lg:shrink-0">
+          <div className="grid grid-cols-2 gap-3">
             <Stat label="Totale rente" value={formatEuro(m.totalInterest)} />
             <Stat label="Totaal betaald" value={formatEuro(m.totalPaid)} />
           </div>
@@ -149,11 +149,11 @@ function HouseResult({ data }: { data: HouseResponse }) {
             <span>Eerste termijn: rente {formatEuro(m.firstMonthInterest)}</span>
             <span>aflossing {formatEuro(m.firstMonthPrincipal)}</span>
           </div>
-          <div className="flex h-2 overflow-hidden rounded-full bg-white/[0.06]">
+          <div className="flex h-2 overflow-hidden rounded-full bg-ink/[0.06]">
             <motion.div initial={{ width: 0 }} animate={{ width: `${interestShare}%` }} transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="bg-cyan" />
             <div className="flex-1 bg-neon/60" />
           </div>
-          <p className="mt-2 text-xs text-white/35">{formatPercent(interestShare, 0)} van je eerste betaling is pure rente. Welkom bij de bank.</p>
+          <p className="mt-2 text-xs text-ink/35">{formatPercent(interestShare, 0)} van je eerste betaling is pure rente. Welkom bij de bank.</p>
         </div>
       </ResultCard>
 
@@ -168,19 +168,19 @@ function HouseResult({ data }: { data: HouseResponse }) {
               return (
                 <li key={h.jaar} className="grid grid-cols-[3.5rem_1fr_7rem] items-center gap-3 text-sm">
                   <span className="font-mono text-muted">{h.jaar}</span>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                    <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ delay: 0.6, duration: 1 }} className="h-full rounded-full bg-white/50" />
+                  <div className="h-1.5 overflow-hidden rounded-full bg-ink/[0.06]">
+                    <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ delay: 0.6, duration: 1 }} className="h-full rounded-full bg-ink/50" />
                   </div>
-                  <span className="text-right font-mono text-white">{formatEuro(h.vraagprijs)}</span>
+                  <span className="text-right font-mono text-ink">{formatEuro(h.vraagprijs)}</span>
                 </li>
               );
             })}
             <li className="grid grid-cols-[3.5rem_1fr_7rem] items-center gap-3 text-sm">
-              <span className="font-mono text-cyan">WOZ</span>
-              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+              <span className="font-mono text-cyan-ink">WOZ</span>
+              <div className="h-1.5 overflow-hidden rounded-full bg-ink/[0.06]">
                 <motion.div initial={{ width: 0 }} animate={{ width: `${(p.wozWaarde / maxPrice) * 100}%` }} transition={{ delay: 0.6, duration: 1 }} className="h-full rounded-full bg-cyan" />
               </div>
-              <span className="text-right font-mono text-cyan">{formatEuro(p.wozWaarde)}</span>
+              <span className="text-right font-mono text-cyan-ink">{formatEuro(p.wozWaarde)}</span>
             </li>
           </ul>
         )}

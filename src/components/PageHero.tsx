@@ -25,9 +25,9 @@ export function PageHero({
     >
       <motion.span
         layout="position"
-        className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium tracking-wide text-muted"
+        className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink/10 bg-ink/[0.03] px-3 py-1 text-xs font-medium tracking-wide text-muted"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_10px_rgb(0_229_255)]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_8px_rgb(14_165_233/0.6)]" />
         {eyebrow}
       </motion.span>
       <motion.h1

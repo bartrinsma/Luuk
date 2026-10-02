@@ -6,13 +6,14 @@ import { kindLabel, type ShareReport } from "@/lib/report";
  * (Helvetica kent geen emoji of pijltjes — die gebruiken we hier dus niet.)
  */
 
-const OBSIDIAN = "#0A0A0A";
-const CYAN = "#00B8CC"; // iets donkerder dan #00E5FF, zodat het leesbaar print op wit
-const MUTED = "#71717A";
-const LINE = "#E4E4E7";
+const INK = "#0F172A";
+const CYAN = "#0284C7"; // lichtblauw, maar donker genoeg om leesbaar te printen
+const SKY = "#0EA5E9";
+const MUTED = "#64748B";
+const LINE = "#E2E8F0";
 
 const s = StyleSheet.create({
-  page: { paddingBottom: 64, fontFamily: "Helvetica", fontSize: 10, color: OBSIDIAN, backgroundColor: "#FFFFFF" },
+  page: { paddingBottom: 64, fontFamily: "Helvetica", fontSize: 10, color: INK, backgroundColor: "#FFFFFF" },
   watermark: {
     position: "absolute",
     top: 360,
@@ -21,16 +22,16 @@ const s = StyleSheet.create({
     textAlign: "center",
     fontSize: 120,
     fontFamily: "Helvetica-Bold",
-    color: "#F4F4F5",
+    color: "#F1F5F9",
     transform: "rotate(-30deg)",
   },
-  header: { backgroundColor: OBSIDIAN, paddingHorizontal: 40, paddingTop: 34, paddingBottom: 30 },
+  header: { backgroundColor: "#F0F9FF", borderBottomWidth: 3, borderColor: SKY, paddingHorizontal: 40, paddingTop: 34, paddingBottom: 30 },
   brandRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" },
-  brand: { fontFamily: "Helvetica-Bold", fontSize: 40, color: "#FFFFFF", letterSpacing: -1 },
-  brandSi: { color: "#00E5FF" },
-  tagline: { fontSize: 10, color: "#A1A1AA", marginTop: 4 },
-  kind: { fontSize: 9, color: "#00E5FF", letterSpacing: 2, textTransform: "uppercase", textAlign: "right" },
-  date: { fontSize: 9, color: "#A1A1AA", textAlign: "right", marginTop: 3 },
+  brand: { fontFamily: "Helvetica-Bold", fontSize: 40, color: INK, letterSpacing: -1 },
+  brandSi: { color: SKY },
+  tagline: { fontSize: 10, color: MUTED, marginTop: 4 },
+  kind: { fontSize: 9, color: CYAN, letterSpacing: 2, textTransform: "uppercase", textAlign: "right" },
+  date: { fontSize: 9, color: MUTED, textAlign: "right", marginTop: 3 },
   body: { paddingHorizontal: 40, paddingTop: 28 },
   subject: { fontFamily: "Helvetica-Bold", fontSize: 18 },
   subtitle: { fontSize: 11, color: MUTED, marginTop: 3 },
@@ -58,9 +59,9 @@ const s = StyleSheet.create({
   factLabel: { color: MUTED, flexDirection: "row", alignItems: "center" },
   factValue: { fontFamily: "Helvetica-Bold" },
   dot: { width: 6, height: 6, borderRadius: 3, marginRight: 6 },
-  verdict: { marginTop: 28, backgroundColor: "#ECFEFF", borderLeftWidth: 4, borderColor: CYAN, padding: 18, borderRadius: 4 },
+  verdict: { marginTop: 28, backgroundColor: "#F0F9FF", borderLeftWidth: 4, borderColor: CYAN, padding: 18, borderRadius: 4 },
   verdictHead: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
-  avatar: { width: 22, height: 22, borderRadius: 5, backgroundColor: OBSIDIAN, color: "#00E5FF", fontFamily: "Helvetica-Bold", fontSize: 12, textAlign: "center", paddingTop: 5, marginRight: 8 },
+  avatar: { width: 22, height: 22, borderRadius: 5, backgroundColor: SKY, color: "#FFFFFF", fontFamily: "Helvetica-Bold", fontSize: 12, textAlign: "center", paddingTop: 5, marginRight: 8 },
   verdictTitle: { fontFamily: "Helvetica-Bold", fontSize: 11 },
   verdictText: { fontSize: 13, lineHeight: 1.5, fontFamily: "Helvetica-Oblique" },
   note: { marginTop: 18, fontSize: 8, color: MUTED, lineHeight: 1.4 },

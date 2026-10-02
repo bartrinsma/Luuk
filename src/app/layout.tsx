@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0A0A",
+  themeColor: "#F6F9FC",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ToastProvider>
             <main className="flex flex-1 flex-col">{children}</main>
           </ToastProvider>
-          <footer className="px-6 pb-8 pt-16 text-center text-xs text-white/30">
+          <footer className="px-6 pb-8 pt-16 text-center text-xs text-ink/30">
             Luuk.si — indicaties, geen financieel advies. Al heeft Luuk meestal gelijk. Sí.
           </footer>
         </div>

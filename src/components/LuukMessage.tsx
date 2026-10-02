@@ -16,8 +16,8 @@ export function LuukMessage({ message }: { message: string | null }) {
           role="status"
           className="panel flex w-full items-start gap-3 rounded-2xl p-4"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 font-black text-cyan">L</div>
-          <p className="pt-1 text-[15px] leading-relaxed text-white/85">{message}</p>
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-soft font-black text-cyan-ink">L</div>
+          <p className="pt-1 text-[15px] leading-relaxed text-ink/85">{message}</p>
         </motion.div>
       )}
     </AnimatePresence>

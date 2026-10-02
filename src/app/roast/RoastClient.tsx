@@ -55,7 +55,7 @@ export function RoastClient({ initialQuery }: { initialQuery: string }) {
           autoCapitalize="none"
           autoFocus
         />
-        <p className="mt-3 text-center text-xs text-white/35">Bijv. jouwconcurrent.nl</p>
+        <p className="mt-3 text-center text-xs text-ink/35">Bijv. jouwconcurrent.nl</p>
       </PageHero>
 
       <div className="mt-8 w-full">
@@ -70,7 +70,7 @@ export function RoastClient({ initialQuery }: { initialQuery: string }) {
 function RoastResult({ data }: { data: SeoResponse }) {
   const r = data.report;
   const passed = r.checks.filter((c) => c.pass).length;
-  const scoreColor = r.mobileScore >= 90 ? "#39FF88" : r.mobileScore >= 50 ? "#00E5FF" : "#FB7185";
+  const scoreColor = r.mobileScore >= 90 ? "#059669" : r.mobileScore >= 50 ? "#0EA5E9" : "#F43F5E";
   const stamp =
     r.mobileScore >= 90 ? { label: "Irritant goed", tone: "good" as const } : r.mobileScore >= 50 ? { label: "Lekt", tone: "neutral" as const } : { label: "Vergiet", tone: "bad" as const };
 
@@ -78,7 +78,7 @@ function RoastResult({ data }: { data: SeoResponse }) {
     <ResultStack key={r.url}>
       <motion.div variants={rise} className="flex flex-wrap items-center justify-between gap-3 px-1">
         <div className="min-w-0">
-          <div className="truncate text-lg font-semibold text-white">{r.hostname}</div>
+          <div className="truncate text-lg font-semibold text-ink">{r.hostname}</div>
           <div className="truncate text-sm text-muted">{r.title ?? "Geen title-tag"}</div>
         </div>
         <SourceBadge tone={data.dataSource === "demo" ? "demo" : "live"}>
@@ -93,10 +93,10 @@ function RoastResult({ data }: { data: SeoResponse }) {
             <div className="flex flex-col gap-3">
               <div>
                 <div className="text-xs uppercase tracking-wider text-muted">Laadtijd</div>
-                <AnimatedNumber value={r.loadTimeMs} format={formatSeconds} className="block font-mono text-4xl font-bold tracking-tight text-white" />
+                <AnimatedNumber value={r.loadTimeMs} format={formatSeconds} className="block font-mono text-4xl font-bold tracking-tight text-ink" />
               </div>
               <div className="text-sm text-muted">
-                <span className="font-mono text-white">{r.pageSizeKb} KB</span> HTML · {r.httpStatus ?? "—"}
+                <span className="font-mono text-ink">{r.pageSizeKb} KB</span> HTML · {r.httpStatus ?? "—"}
               </div>
             </div>
           </div>
@@ -112,11 +112,11 @@ function RoastResult({ data }: { data: SeoResponse }) {
                 transition={{ delay: 0.3 + i * 0.04 }}
                 className="flex items-center gap-2.5 text-sm"
               >
-                <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${c.pass ? "bg-neon/15 text-neon" : "bg-rose-400/15 text-rose-300"}`}>
+                <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${c.pass ? "bg-neon/15 text-neon" : "bg-rose-400/15 text-rose-600"}`}>
                   {c.pass ? <Check className="h-3 w-3" strokeWidth={3} /> : <X className="h-3 w-3" strokeWidth={3} />}
                 </span>
-                <span className="text-white/85">{c.label}</span>
-                <span className="ml-auto truncate text-xs text-white/35">{c.detail}</span>
+                <span className="text-ink/85">{c.label}</span>
+                <span className="ml-auto truncate text-xs text-ink/35">{c.detail}</span>
               </motion.li>
             ))}
           </ul>
@@ -142,7 +142,7 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
   return (
     <div className="relative h-32 w-32 shrink-0">
       <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-        <circle cx="50" cy="50" r={radius} fill="none" stroke="rgb(255 255 255 / 0.07)" strokeWidth="7" />
+        <circle cx="50" cy="50" r={radius} fill="none" stroke="rgb(15 23 42 / 0.08)" strokeWidth="7" />
         <motion.circle
           cx="50"
           cy="50"

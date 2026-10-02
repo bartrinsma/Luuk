@@ -69,7 +69,7 @@ export function HomeClient({ initialQuery }: { initialQuery: string }) {
                   setQuery(ex);
                   ask(ex);
                 }}
-                className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1.5 text-sm text-muted transition-colors hover:border-cyan/30 hover:text-white"
+                className="rounded-full border border-ink/[0.08] bg-ink/[0.02] px-3.5 py-1.5 text-sm text-muted transition-colors hover:border-cyan/30 hover:text-ink"
               >
                 {ex}
               </button>
@@ -83,16 +83,16 @@ export function HomeClient({ initialQuery }: { initialQuery: string }) {
         {loading && <Thinking label="Luuk denkt na" />}
         {data && !loading && (
           <ResultStack key={asked}>
-            <motion.p variants={rise} className="px-1 text-sm text-white/40">
+            <motion.p variants={rise} className="px-1 text-sm text-ink/40">
               {asked}
             </motion.p>
             <motion.section variants={rise} className="panel rounded-3xl p-6 sm:p-8">
               <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan font-black text-obsidian shadow-[0_0_24px_-4px_rgb(0_229_255/0.8)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan font-black text-white shadow-[0_0_24px_-4px_rgb(14_165_233/0.45)]">
                   L
                 </div>
                 <div className="text-sm">
-                  <div className="font-semibold text-white">Luuk</div>
+                  <div className="font-semibold text-ink">Luuk</div>
                   <div className="text-xs text-muted">{data.source === "mock" ? "demo-modus" : "live"}</div>
                 </div>
               </div>
@@ -102,7 +102,7 @@ export function HomeClient({ initialQuery }: { initialQuery: string }) {
               <motion.div variants={rise}>
                 <Link
                   href={`${suggestion.href}?q=${encodeURIComponent(asked)}`}
-                  className="group flex items-center justify-between rounded-2xl border border-cyan/25 bg-cyan/[0.06] px-5 py-4 text-cyan transition-colors hover:bg-cyan/[0.12]"
+                  className="group flex items-center justify-between rounded-2xl border border-cyan/25 bg-cyan/[0.06] px-5 py-4 text-cyan-ink transition-colors hover:bg-cyan/[0.12]"
                 >
                   <span className="flex items-center gap-3 font-medium">
                     <suggestion.icon className="h-5 w-5" />
@@ -124,7 +124,7 @@ export function HomeClient({ initialQuery }: { initialQuery: string }) {
 function TypedAnswer({ text }: { text: string }) {
   const words = text.split(/(\s+)/);
   return (
-    <p className="whitespace-pre-line text-lg leading-relaxed text-white/90 sm:text-xl">
+    <p className="whitespace-pre-line text-lg leading-relaxed text-ink/90 sm:text-xl">
       {words.map((w, i) => (
         <motion.span key={i} initial={{ opacity: 0, filter: "blur(4px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} transition={{ delay: i * 0.012, duration: 0.3 }}>
           {w}
@@ -153,14 +153,14 @@ function ModuleGrid() {
           <Link href={href} className="panel group flex h-full flex-col rounded-2xl p-5 transition-colors hover:border-cyan/25">
             <div className="mb-4 flex items-center justify-between">
               <Icon className="h-5 w-5 text-cyan" />
-              <ArrowUpRight className="h-4 w-4 text-white/20 transition-colors group-hover:text-cyan" />
+              <ArrowUpRight className="h-4 w-4 text-ink/20 transition-colors group-hover:text-cyan" />
             </div>
-            <div className="font-semibold text-white">{title}</div>
+            <div className="font-semibold text-ink">{title}</div>
             <p className="mt-1 text-sm leading-relaxed text-muted">{text}</p>
           </Link>
         </motion.div>
       ))}
-      <motion.p variants={rise} className="col-span-full mt-4 flex items-center justify-center gap-2 text-xs text-white/30">
+      <motion.p variants={rise} className="col-span-full mt-4 flex items-center justify-center gap-2 text-xs text-ink/30">
         <Sparkles className="h-3.5 w-3.5" /> Tip: plak een kenteken, postcode of URL hierboven — Luuk stuurt je door.
       </motion.p>
     </motion.div>

@@ -25,13 +25,13 @@ export function NavigationTabs() {
             href={href}
             aria-current={active ? "page" : undefined}
             className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors sm:px-4 ${
-              active ? "text-obsidian" : "text-muted hover:text-white"
+              active ? "text-white" : "text-muted hover:text-ink"
             }`}
           >
             {active && (
               <motion.span
                 layoutId="nav-pill"
-                className="absolute inset-0 rounded-full bg-cyan shadow-[0_0_24px_-4px_rgb(0_229_255/0.8)]"
+                className="absolute inset-0 rounded-full bg-cyan shadow-[0_0_24px_-4px_rgb(14_165_233/0.45)]"
                 transition={{ type: "spring", stiffness: 420, damping: 34 }}
               />
             )}

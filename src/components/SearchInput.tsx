@@ -11,13 +11,13 @@ export function OmnibarShell({ children, focused, className = "" }: { children: 
     <div className={`relative w-full ${className}`}>
       <div
         aria-hidden
-        className={`pointer-events-none absolute -inset-3 rounded-[2rem] bg-[radial-gradient(60%_120%_at_50%_50%,rgb(0_229_255/0.35),transparent_70%)] blur-2xl transition-opacity duration-500 ${
+        className={`pointer-events-none absolute -inset-3 rounded-[2rem] bg-[radial-gradient(60%_120%_at_50%_50%,rgb(14_165_233/0.35),transparent_70%)] blur-2xl transition-opacity duration-500 ${
           focused ? "opacity-100" : "opacity-0"
         }`}
       />
       <div
         className={`glass relative flex items-center gap-2 rounded-3xl p-2 transition-[border-color,box-shadow] duration-300 ${
-          focused ? "border-cyan/40! shadow-[0_0_0_1px_rgb(0_229_255/0.15),0_30px_80px_-20px_rgb(0_229_255/0.25)]" : ""
+          focused ? "border-cyan/40! shadow-[0_0_0_1px_rgb(14_165_233/0.15),0_30px_80px_-20px_rgb(14_165_233/0.25)]" : ""
         }`}
       >
         {children}
@@ -32,7 +32,7 @@ export function SubmitButton({ loading, disabled, label = "Vraag het Luuk" }: { 
       type="submit"
       disabled={disabled || loading}
       aria-label={label}
-      className="group flex h-12 shrink-0 items-center gap-2 rounded-2xl bg-cyan px-4 font-semibold text-obsidian transition-all hover:shadow-[0_0_30px_-4px_rgb(0_229_255/0.9)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none sm:px-5"
+      className="group flex h-12 shrink-0 items-center gap-2 rounded-2xl bg-cyan px-4 font-semibold text-white transition-all hover:shadow-[0_0_30px_-4px_rgb(14_165_233/0.5)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none sm:px-5"
     >
       {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />}
       <span className="hidden sm:inline">{loading ? "Denkt…" : "Sí"}</span>
@@ -76,7 +76,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
           placeholder={placeholder}
           autoComplete="off"
           spellCheck={false}
-          className="h-12 min-w-0 flex-1 bg-transparent px-2 text-lg text-white placeholder:text-white/35 focus:outline-none sm:text-xl"
+          className="h-12 min-w-0 flex-1 bg-transparent px-2 text-lg text-ink placeholder:text-ink/35 focus:outline-none sm:text-xl"
           {...rest}
         />
         {addon}
