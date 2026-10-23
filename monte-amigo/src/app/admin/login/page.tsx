@@ -13,7 +13,7 @@ export default async function AdminLoginPage() {
         <div className="adm-card-body">
           <div className="adm-brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/logo.jpg" alt="" />
+            <img src="/img/logo.png" alt="" />
             <span>
               Monte Amigo
               <small>Beheer</small>

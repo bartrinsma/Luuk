@@ -493,31 +493,66 @@ a:hover, a:focus { color: #000; }
 /* ---------- Footer ---------- */
 
 .site-footer {
-  border-top: 1px solid var(--line);
+  margin-top: 1em;
+  background: #23303a;
+  color: #c9d3da;
+  font-size: .95rem;
 }
+.site-footer a { color: #fff; text-decoration: none; }
+.site-footer a:hover,
+.site-footer a:focus { color: #fff; text-decoration: underline; }
 .site-footer__inner {
   max-width: var(--wide);
   margin: 0 auto;
-  padding: 2.5em 1.5em 3em;
+  padding: 3em 1.5em;
 }
+.footer-grid {
+  display: grid;
+  gap: 2.25em;
+}
+.footer-logo {
+  display: inline-block;
+  background: #fff;
+  border-radius: 8px;
+  padding: .6em .9em;
+  margin-bottom: 1em;
+}
+.footer-logo img { width: 150px; }
+.footer-brand p { margin: 0; max-width: 22em; }
+.footer-title {
+  margin: 0 0 1em;
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.footer-list { list-style: none; margin: 0 0 1.25em; padding: 0; }
+.footer-list li { margin: 0 0 .45em; }
+.footer-facts li { color: #c9d3da; }
+.footer-address { font-style: normal; margin: 0 0 1em; line-height: 1.6; }
 .social {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: var(--muted);
-  color: #fff;
+  background: var(--accent);
+  color: #fff !important;
 }
-.social:hover, .social:focus { background: #333; color: #fff; }
-.social svg { width: 24px; height: 24px; }
-.site-info {
-  margin: 1.5em 0 0;
-  color: var(--muted);
-  font-size: .9rem;
+.social:hover, .social:focus { background: var(--accent-dark); text-decoration: none !important; }
+.social svg { width: 22px; height: 22px; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.1); }
+.footer-bottom .site-footer__inner { padding-top: 1.25em; padding-bottom: 1.25em; }
+.footer-bottom p { margin: 0; font-size: .85rem; color: #9fb0bc; }
+
+@media (min-width: 40em) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
 }
-.site-info a { color: var(--muted); }
+@media (min-width: 62em) {
+  .footer-grid { grid-template-columns: 1.4fr 1fr 1fr .8fr; }
+}
 
 /* ---------- Groter scherm ---------- */
 

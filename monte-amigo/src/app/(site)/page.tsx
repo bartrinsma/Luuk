@@ -35,12 +35,12 @@ export default function HomePage() {
         </p>
 
         <div className="columns">
-          <img src="/img/logo.jpg" alt="Logo Monte Amigo – Vakantiehuis Spanje" width={428} height={313} />
+          <img src="/img/logo.png" alt="Logo Monte Amigo – Vakantiehuis Spanje" width={362} height={266} />
           <img
             src="/img/cumbre-del-sol.jpg"
             alt="Toegangsbord Residential Park Cumbre del Sol"
-            width={428}
-            height={312}
+            width={768}
+            height={511}
             loading="lazy"
           />
         </div>

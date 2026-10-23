@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://monte-amigo.nl"),
   title: { default: "Monte Amigo – Cumbre del Sol", template: "%s – Monte Amigo – Cumbre del Sol" },
-  icons: { icon: "/img/logo.jpg" },
+  icons: { icon: "/img/logo.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
