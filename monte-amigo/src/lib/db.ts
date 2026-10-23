@@ -3,7 +3,8 @@ import { SEED_BOOKINGS, SEED_REVIEWS } from "./seed";
 
 /**
  * Database-laag. Overal dezelfde SQL (Postgres):
- *  - DATABASE_URL / NETLIFY_DATABASE_URL gezet → echte Postgres (Netlify DB, Neon, Supabase, …)
+ *  - Netlify Database → schema via netlify/database/migrations (toegepast bij elke deploy)
+ *  - DATABASE_URL gezet → eigen Postgres (Neon, Supabase, …); schema wordt bij de start aangemaakt
  *  - anders → PGlite: Postgres in WASM, opgeslagen in .data/pglite (lokaal) of /tmp (serverless, NIET blijvend)
  */
 
@@ -13,6 +14,7 @@ export interface Db {
   persistent: boolean;
 }
 
+// Houd gelijk met netlify/database/migrations; nieuwe wijzigingen als nieuwe migratie toevoegen.
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS ma_bookings (
   id          SERIAL PRIMARY KEY,
@@ -75,8 +77,22 @@ export function getDb(): Promise<Db> {
   return dbPromise;
 }
 
+/** Connection string van Netlify Database, als die voor deze site is ingericht. */
+async function netlifyDbUrl(): Promise<string | undefined> {
+  if (process.env.NETLIFY_DB_URL) return process.env.NETLIFY_DB_URL;
+  if (!process.env.NETLIFY) return undefined;
+  try {
+    const { getConnectionString } = await import("@netlify/database");
+    return getConnectionString();
+  } catch {
+    return undefined;
+  }
+}
+
 async function createDb(): Promise<Db> {
-  const url = process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL;
+  const ownUrl = process.env.DATABASE_URL;
+  const netlifyUrl = ownUrl ? undefined : await netlifyDbUrl();
+  const url = ownUrl || netlifyUrl;
 
   if (url) {
     const { default: postgres } = await import("postgres");
@@ -88,7 +104,8 @@ async function createDb(): Promise<Db> {
       onnotice: () => {},
       types: { date: { to: 1082, from: [1082], serialize: (v: string) => v, parse: (v: string) => v } },
     });
-    await sql.unsafe(SCHEMA);
+    // Bij Netlify Database zorgen de migraties voor het schema.
+    if (!netlifyUrl) await sql.unsafe(SCHEMA);
     return {
       kind: "postgres",
       persistent: true,
