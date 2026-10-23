@@ -482,13 +482,9 @@ a:hover, a:focus { color: #000; }
 
 /* ---------- Omgeving ---------- */
 
-.photo-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: .75em;
-  margin: 2em 0 0;
-}
-.photo-strip img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.inline-photo { margin: 0 0 1.5em; }
+.inline-photo img { width: 100%; }
+
 
 /* ---------- Footer ---------- */
 
@@ -590,8 +586,6 @@ a:hover, a:focus { color: #000; }
 
 @media (max-width: 30em) {
   .field-row { grid-template-columns: 1fr; }
-  .photo-strip { grid-template-columns: 1fr 1fr; }
-  .photo-strip img:last-child { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

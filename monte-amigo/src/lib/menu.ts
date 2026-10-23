@@ -5,5 +5,5 @@ export const MENU = [
   { href: "/agenda/", label: "Agenda" },
   { href: "/reserveren/", label: "Reserveren" },
   { href: "/recensies/", label: "Recensies" },
-  { href: "/een-homepage-sectie/", label: "Omgeving" },
+  { href: "/omgeving/", label: "Omgeving" },
 ];

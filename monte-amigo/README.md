@@ -19,7 +19,7 @@ npm run dev                  # http://localhost:3000
 | `/agenda/` | Beschikbaarheid (uit de database) |
 | `/reserveren/` | Reserveringsformulier; aanvragen komen in de admin terecht |
 | `/recensies/` | Recensies (uit de database) |
-| `/een-homepage-sectie/` | Wat te doen in de omgeving (in het menu: "Omgeving") |
+| `/omgeving/` | Wat te doen in de omgeving (oude URL `/een-homepage-sectie/` stuurt door) |
 
 ## Beheer (`/admin`)
 Inloggen met `ADMIN_PASSWORD`.

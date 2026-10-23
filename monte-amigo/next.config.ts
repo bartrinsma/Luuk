@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
   // Deze app staat in een submap van een andere repo; houd de root hier.
   turbopack: { root },
   outputFileTracingRoot: root,
+  async redirects() {
+    // Oude WordPress-URL van de omgevingspagina.
+    return [{ source: "/een-homepage-sectie/", destination: "/omgeving/", permanent: true }];
+  },
 };
 
 export default nextConfig;

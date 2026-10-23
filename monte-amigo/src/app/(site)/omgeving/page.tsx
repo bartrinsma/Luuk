@@ -1,11 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
+import { Gallery, type Photo } from "@/components/site/Gallery";
 
 export const metadata: Metadata = {
   title: "Wat te doen in de omgeving?",
   description:
     "Wat te doen rond Cumbre del Sol en Moraira: stranden, bergdorpjes, attractieparken, golf, wielrennen en wandelen aan de Costa Blanca.",
 };
+
+const PHOTOS: Photo[] = [
+  { src: "/img/strand-moraira.jpg", alt: "Strand bij Moraira met zicht op de kaap" },
+  { src: "/img/zeilboten.jpg", alt: "Zeilboten voor de kust" },
+  { src: "/img/suppen.jpg", alt: "Suppen op zee bij zonsondergang" },
+  { src: "/img/wandelpad-kust.jpg", alt: "Wandelpad langs de kust" },
+  { src: "/img/rotsboog.jpg", alt: "Rotsboog aan de kust" },
+  { src: "/img/strand-kinderen.jpg", alt: "Spelende kinderen op het strand" },
+];
 
 export default function OmgevingPage() {
   return (
@@ -29,6 +39,9 @@ export default function OmgevingPage() {
         </p>
 
         <h3>Moraira</h3>
+        <figure className="inline-photo">
+          <img src="/img/moraira.jpg" alt="Letters MORAIRA aan de kust" width={768} height={576} loading="lazy" />
+        </figure>
         <p>
           Op korte rijafstand ligt het charmante stadje Moraira, bekend om zijn traditionele Spaanse architectuur, ongerepte stranden
           en verrassende restaurants. Of je nu wilt genieten van de zon op het strand, een duik wilt nemen in de azuurblauwe zee,
@@ -41,11 +54,7 @@ export default function OmgevingPage() {
           omgeving verkennen?
         </p>
 
-        <div className="photo-strip">
-          <img src="/img/zee-baai.jpg" alt="Heldere baai met zeilboten" loading="lazy" />
-          <img src="/img/strand-kinderen.jpg" alt="Spelende kinderen op het strand" loading="lazy" />
-          <img src="/img/rotsboog.jpg" alt="Rotsboog aan de kust" loading="lazy" />
-        </div>
+        <Gallery photos={PHOTOS} />
       </div>
     </main>
   );
