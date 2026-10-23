@@ -1,37 +1,61 @@
-# Monte Amigo – website
+# Monte Amigo – website + beheer
 
-Statische nabouw van de voorkant van monte-amigo.nl (zonder WordPress). Gewone HTML/CSS/JS:
-upload de inhoud van deze map naar elke webhost (of Netlify met publish-map `monte-amigo`).
-De URL's zijn hetzelfde als op de oude site (`/over-ons/`, `/reserveren/`, enz.).
+Nabouw van monte-amigo.nl als Next.js-app, met een eigen beheeromgeving op `/admin`.
+Losse app in deze map (eigen `package.json`); los van Luuk.si in de rest van de repo.
 
-## Pagina's
+```bash
+cd monte-amigo
+npm install
+cp .env.example .env.local   # zet minimaal ADMIN_PASSWORD
+npm run dev                  # http://localhost:3000
+```
+
+## Website
 | Pad | Inhoud |
 | --- | --- |
 | `/` | Home: video, welkomsttekst, registratienummers |
 | `/over-ons/` | Vakantiehuis: beschrijving + fotogalerij (met vergroting) |
 | `/tarieven/` | Tarieventabel + voorwaarden |
-| `/agenda/` | Beschikbaarheidskalender |
-| `/reserveren/` | Reserveringsformulier |
-| `/recensies/` | Recensies van gasten |
+| `/agenda/` | Beschikbaarheid (uit de database) |
+| `/reserveren/` | Reserveringsformulier; aanvragen komen in de admin terecht |
+| `/recensies/` | Recensies (uit de database) |
 | `/een-homepage-sectie/` | Wat te doen in de omgeving (in het menu: "Omgeving") |
 
-## Zelf bijwerken
-Alles staat in **`assets/data.js`**:
-- `bookings`: bezette periodes (`van` = aankomstdag, `tot` = vertrekdag). De agenda en het formulier lezen dit.
-- `rates`: prijzen per maand (gebruikt voor de prijsindicatie in het formulier). De tabel op `/tarieven/` staat los in de HTML; pas die ook aan.
-- `formEndpoint`: optioneel. Leeg = het formulier opent een vooringevulde e-mail naar `rentalmonteamigo@gmail.com`.
-  Vul een URL in van een formulierdienst (bijv. Formspree) die een JSON-POST accepteert, dan wordt het formulier direct verstuurd.
+## Beheer (`/admin`)
+Inloggen met `ADMIN_PASSWORD`.
 
-## Verbeteringen ten opzichte van het origineel
-- **Agenda**: eigen kalender in plaats van een externe widget: wisseldagen, weeknummers, vorige dagen grijs, bladeren.
-  Klik op een aankomst- en vertrekdatum en ga direct door naar het formulier met de datums al ingevuld.
-- **Formulier**: aantal gasten, keuze van datums in de kalender, controle op bezette nachten, minimaal 2 nachten,
-  melding bij meer dan 10 nachten en bij juli/augustus niet zaterdag–zaterdag, live prijsindicatie
-  (weektarief + nachten + €125 schoonmaak, borg apart), duidelijke foutmeldingen, spamfilter (honeypot).
-- Fotogalerij met vergroting (pijltjes, swipe, Esc), gemiddelde score bij de recensies,
-  huidige maand gemarkeerd in de tarieventabel, beschrijvingen voor zoekmachines en alt-teksten bij foto's.
+- **Dashboard**: open aanvragen, komende verblijven, bezetting komende 90 dagen, recensies.
+- **Boekingen**: aanvragen van de website bevestigen of afwijzen, zelf periodes toevoegen
+  (bevestigd of geblokkeerd), wijzigen en verwijderen. Alleen *bevestigd* en *geblokkeerd* maken de agenda bezet.
+  Overlappende periodes worden geweigerd.
+- **Recensies**: toevoegen, wijzigen, verbergen/tonen en verwijderen. De 23 recensies van de oude site
+  staan er bij de eerste start al in.
+- **Bugs melden** (`/admin/bug`): bug invoeren; die wordt automatisch een ticket op de to-do lijst in
+  tickets.onlinemetbart.nl. Mislukt doorsturen, dan blijft de bug bewaard met een knop "Opnieuw doorsturen".
+- **Instellingen**: adres + API-sleutel van het ticketsysteem, automatisch doorsturen aan/uit, verbinding testen.
+
+## Koppeling met tickets.onlinemetbart.nl
+1. In het ticketsysteem: voer `supabase/migrations/0003_api_keys.sql` uit, open de klant en kies
+   **API-koppeling → Nieuwe sleutel**.
+2. Hier: **Instellingen** → plak de sleutel → **Verbinding testen**.
+
+Elke bug wordt `POST /api/v1/tickets` met titel "Bug: …", de beschrijving, verwachting, pagina en prioriteit.
+`external_ref` (`monte-amigo-bug-<id>`) voorkomt dubbele tickets bij opnieuw versturen.
+Voor een andere klantsite: dezelfde code met de API-sleutel van die klant.
+
+## Omgevingsvariabelen
+Zie `.env.example`. Belangrijk voor productie:
+- `ADMIN_PASSWORD`: zonder dit staat `/admin` dicht.
+- `DATABASE_URL` (of Netlify DB): blijvende Postgres. Zonder database-URL draait PGlite; dat is lokaal prima,
+  maar op serverless hosting **niet blijvend**. De admin waarschuwt hiervoor.
+- `RESEND_API_KEY` + `NOTIFY_EMAIL`: e-mail bij een nieuwe reserveringsaanvraag (optioneel).
+
+## Netlify
+Nieuwe site uit deze repo met **Base directory** `monte-amigo`; `netlify.toml` regelt de rest.
 
 ## Nog te doen
-- **Foto's**: `img/` bevat uitsneden uit schermafbeeldingen, omdat monte-amigo.nl vanuit de bouwomgeving niet
-  bereikbaar was. Vervang ze door de originele bestanden met **dezelfde bestandsnaam** voor scherpere foto's.
-- **Video**: zet de homepagevideo neer als `video/monte-amigo.mp4`. Zolang het bestand ontbreekt, wordt het videoblok verborgen.
+- **Foto's**: `public/img/` bevat uitsneden uit schermafbeeldingen, omdat monte-amigo.nl vanuit de bouwomgeving
+  niet bereikbaar was. Vervang ze door de originele bestanden met **dezelfde bestandsnaam**.
+- **Video**: zet de homepagevideo neer als `public/video/monte-amigo.mp4`. Zolang die ontbreekt, wordt het
+  videoblok verborgen.
+- Tarieven staan in `src/lib/rates.ts` (tabel en prijsindicatie gebruiken dezelfde gegevens).

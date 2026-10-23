@@ -1,0 +1,116 @@
+/* Beschikbaarheidskalender: gebruikt op de site én in de admin. */
+
+.cal-root,
+.site {
+  --free: #a6e6db;
+  --free-text: #1d5e53;
+  --booked: #f6b3b3;
+  --booked-text: #8a2b2b;
+  --cal-accent: #1ba1e2;
+}
+
+.cal-loading { min-height: 320px; }
+
+
+.cal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin: 0 0 1.25em;
+}
+.cal-toolbar .cal-range { font-weight: 700; color: #222; text-align: center; }
+.cal-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: .45em .9em;
+  font: inherit;
+  font-size: .9rem;
+  color: #222;
+  cursor: pointer;
+}
+.cal-btn:hover:not(:disabled) { border-color: #999; }
+.cal-btn:disabled { opacity: .4; cursor: default; }
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.75em 1.5em;
+}
+.cal-month h3 {
+  margin: 0 0 .4em;
+  font-size: .9rem;
+  font-weight: 700;
+  color: #222;
+}
+.cal-month table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+  table-layout: fixed;
+}
+.cal-month th {
+  font-size: .68rem;
+  font-weight: 500;
+  color: #999;
+  padding: 0 0 .2em;
+}
+.cal-month td {
+  padding: 0;
+  text-align: center;
+  font-size: .78rem;
+}
+.cal-month td.wk { color: #bbb; font-size: .62rem; }
+.cal-day {
+  display: block;
+  width: 100%;
+  padding: .32em 0;
+  border: 0;
+  border-radius: 3px;
+  font: inherit;
+  font-size: .78rem;
+  line-height: 1.3;
+  background: var(--free);
+  color: var(--free-text);
+}
+button.cal-day { cursor: pointer; }
+button.cal-day:hover { outline: 2px solid var(--free-text); outline-offset: -2px; }
+.cal-day.booked { background: var(--booked); color: var(--booked-text); }
+/* Wisseldagen: ochtend = vertrek vorige gast, middag = aankomst volgende gast */
+.cal-day.arrive { background: linear-gradient(135deg, var(--free) 50%, var(--booked) 50%); }
+.cal-day.depart { background: linear-gradient(135deg, var(--booked) 50%, var(--free) 50%); }
+.cal-day.change { background: var(--booked); color: var(--booked-text); }
+.cal-day.past { background: #f2f2f2; color: #bbb; }
+.cal-day.sel,
+.cal-day.sel-start,
+.cal-day.sel-end { background: var(--cal-accent); color: #fff; font-weight: 700; }
+.cal-day.in-range { background: #bfe5f7; color: #0d4f70; }
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5em 1.5em;
+  margin: 1.75em 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: .9rem;
+}
+.cal-legend li { display: flex; align-items: center; gap: .5em; }
+.cal-legend .sw {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.sw.free { background: var(--free); }
+.sw.booked { background: var(--booked); }
+.sw.arrive { background: linear-gradient(135deg, var(--free) 50%, var(--booked) 50%); }
+.sw.sel { background: var(--cal-accent); }
+
+.cal-hint {
+  margin: 1em 0 0;
+  font-size: .9rem;
+  color: #767676;
+}
+

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Monte Amigo is een losse app met een eigen configuratie.
+    "monte-amigo/**",
   ]),
 ]);
 
