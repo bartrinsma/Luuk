@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reserveren – Monte Amigo – Cumbre del Sol</title>
+  <meta name="description" content="Reserveer je vakantie in Monte Amigo, Cumbre del Sol. Bekijk de beschikbaarheid en vraag direct je verblijf aan.">
+  <meta property="og:title" content="Reserveren – Monte Amigo – Cumbre del Sol">
+  <meta property="og:description" content="Reserveer je vakantie in Monte Amigo, Cumbre del Sol. Bekijk de beschikbaarheid en vraag direct je verblijf aan.">
+  <meta property="og:image" content="../img/balkon-uitzicht.jpg">
+  <link rel="icon" href="../img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/data.js" defer></script>
+  <script src="../assets/site.js" defer></script>
+  <script src="../assets/calendar.js" defer></script>
+  <script src="../assets/reserveren.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Naar de inhoud</a>
+
+  <header class="site-header">
+    <div class="hero hero--small" style="background-image:url('../img/hero-cliff.jpg')">
+      <div class="site-title">
+        <a href="../" rel="home">Monte Amigo – Cumbre del Sol</a>
+        <p>Luxe vakantieappartement voor 4/5 personen aan de Costa Blanca</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-nav is-sticky" aria-label="Hoofdmenu">
+    <div class="main-nav__inner">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2.4H3zm0 4.8h18v2.4H3zm0 4.8h18V18H3z"/></svg> Menu</button>
+      <ul class="menu" id="menu">
+        <li><a href="../">Home</a></li>
+        <li><a href="../over-ons/">Over ons</a></li>
+        <li><a href="../tarieven/">Tarieven</a></li>
+        <li><a href="../agenda/">Agenda</a></li>
+        <li><a href="../reserveren/" aria-current="page">Reserveren</a></li>
+        <li><a href="../recensies/">Recensies</a></li>
+        <li><a href="../een-homepage-sectie/">Omgeving</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="content" class="site-content">
+    <h1 class="page-title">Reserveren</h1>
+    <div class="entry-content">
+      <p>Wil jij zeker zijn van jouw heerlijke vakantie bij ons in Monte Amigo? Vul dan onderstaand formulier in zodat wij jouw reservering kunnen bevestigen. Heb je nog vragen of stuur je liever een e-mail? Klik dan op de button linksonder of stuur jouw e-mail naar <a href="mailto:rentalmonteamigo@gmail.com">rentalmonteamigo@gmail.com</a>. Wij hopen je snel te verwelkomen!</p>
+
+      <p>Ps. Wij zijn verplicht uw gegevens te registreren bij de Spaanse overheid. Daarvoor vragen wij van elke gast de naam, geboortedatum, nationaliteit, huisadres en paspoort/id-nummer.</p>
+
+      <form id="reserveren-form" class="booking-form" novalidate>
+        <div class="field">
+          <label for="naam">Naam <span class="req" aria-hidden="true">*</span></label>
+          <input id="naam" name="naam" type="text" autocomplete="name" required>
+          <p class="err" role="alert"></p>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="email">E-mailadres <span class="req" aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required>
+            <p class="err" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="telefoon">Telefoonnummer <span class="req" aria-hidden="true">*</span></label>
+            <input id="telefoon" name="telefoon" type="tel" autocomplete="tel" inputmode="tel" required>
+            <p class="err" role="alert"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="gasten">Aantal gasten <span class="req" aria-hidden="true">*</span></label>
+          <select id="gasten" name="gasten" required>
+            <option value="">Kies…</option>
+            <option value="1">1 persoon</option>
+            <option value="2">2 personen</option>
+            <option value="3">3 personen</option>
+            <option value="4">4 personen</option>
+            <option value="5">5 personen</option>
+          </select>
+          <p class="err" role="alert"></p>
+        </div>
+
+        <div class="booking-calendar" id="booking-calendar" aria-label="Beschikbaarheid: klik op je aankomst- en vertrekdatum"></div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="aankomst">Aankomstdatum <span class="req" aria-hidden="true">*</span></label>
+            <input id="aankomst" name="aankomst" type="date" required>
+            <p class="err" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="vertrek">Vertrekdatum <span class="req" aria-hidden="true">*</span></label>
+            <input id="vertrek" name="vertrek" type="date" required>
+            <p class="err" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="summary" id="summary" aria-live="polite" hidden></div>
+
+        <div class="field">
+          <label for="toelichting">Toelichting</label>
+          <textarea id="toelichting" name="toelichting" rows="5" placeholder="Bijvoorbeeld: kinderbedje of kinderstoel gewenst, verwachte aankomsttijd, vragen…"></textarea>
+          <p class="err" role="alert"></p>
+        </div>
+
+        <div class="hp" aria-hidden="true">
+          <label for="website">Laat dit veld leeg</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn" type="submit">Verstuur je formulier</button>
+        <div class="form-status" id="form-status" role="status"></div>
+      </form>
+
+      <figure class="after-form">
+        <img src="../img/zee-baai.jpg" alt="Heldere blauwe baai met zeilboten aan de Costa Blanca" width="871" height="652" loading="lazy">
+      </figure>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <a class="social" href="mailto:rentalmonteamigo@gmail.com" aria-label="Stuur ons een e-mail"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3.5 6.5h17v11h-17z"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="m3.5 7 8.5 6.5L20.5 7"/></svg></a>
+      <p class="site-info">&copy; <span data-year>2026</span> Monte Amigo &middot; Cumbre del Sol &middot; <a href="mailto:rentalmonteamigo@gmail.com">rentalmonteamigo@gmail.com</a></p>
+    </div>
+  </footer>
+  <script>document.querySelectorAll("[data-year]").forEach(function(e){e.textContent=new Date().getFullYear()})</script>
+</body>
+</html>
